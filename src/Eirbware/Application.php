@@ -22,7 +22,7 @@ class Application extends BaseApplication
     /**
      * Paramètres
      */
-    private $parameters = array(
+    private $defaultParameters = array(
         // Paramètres du serveur CAS
         'cas.host' => 'cas.ipb.fr',
         'cas.port' => 443,
@@ -35,11 +35,13 @@ class Application extends BaseApplication
     /**
      * Construction de l'applicaiton
      */
-    public function __construct()
+    public function __construct(array $parameters = array())
     {
         parent::__construct();
 
-        foreach ($this->parameters as $key => $value) {
+        $parameters = array_replace($this->defaultParameters, $parameters);
+
+        foreach ($parameters as $key => $value) {
             $this[$key] = $value;
         }
 
