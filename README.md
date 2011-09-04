@@ -93,3 +93,9 @@ $app->connectDb('host', 'base', 'user', 'pass');
 ```
 Voir :
 * [L'extension Doctrine de Silex](http://silex.sensiolabs.org/doc/extensions/doctrine.html)
+
+Application d'exemple
+---------------------
+
+Ce dépôt contient une application d'exemple sous `exemple/`, consultez la pour découvrir
+les fonctionnalités !
