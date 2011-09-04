@@ -3,11 +3,13 @@
         <title>Eirbware : application d'exemple</title>
     </head>
     <body>
-        <h1>Hello world !</h1>
+        {% block body %}
+        <h1>Bienvenue !</h1>
         {% if user %}
             Bonjour {{ user }} ! <a href="/logout">Déconnexion</a>
         {% else %}
             Vous êtes inconnus, <a href="/login">identifiez-vous</a> 
         {% endif %}
+        {% endblock %}
     </body>
 </html>

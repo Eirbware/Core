@@ -1,15 +1,26 @@
 <?php
 include(__DIR__.'/../autoload.php');
 
-$app['debug'] = true;
-
 $app = new Eirbware\Application();
 
 $app->secureWithCAS(false);
+$app->connectDb('localhost', 'eirbware', 'root', 'admin');
 
+/**
+ * Page principale
+ */
 $app->get('/', function() use ($app) {
     return $app['twig']->render('index.html.twig', array(
         'user' => $app['user']
+    ));
+});
+
+/***
+ * Affiche la liste des personnes
+ */
+$app->get('/personnes', function() use ($app) {
+    return $app['twig']->render('personnes.html.twig', array(
+        'personnes' => $app['db']->fetchAll('SELECT * FROM personnes')
     ));
 });
 

@@ -6,6 +6,7 @@ use Silex\Application as BaseApplication;
 
 use Silex\Extension\SessionExtension;
 use Silex\Extension\TwigExtension;
+use Silex\Extension\DoctrineExtension;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,13 @@ class Application extends BaseApplication
         'cas.host' => 'cas.ipb.fr',
         'cas.port' => 443,
         'cas.context' => '',
+
+        // Paramètres pour la base de données de Eirbware 
+        // (accès en lecture seule)
+        'eirbware_db.host' => 'localhost',
+        'eirbware_db.dbname' => 'eirbware',
+        'eirbware_db.user' => 'root',
+        'eirbware_db.password' => 'admin',
 
         // Répértoire des vues
         'templates.dir' => 'views'
@@ -91,5 +99,42 @@ class Application extends BaseApplication
         $this->get($logout_url, function() {
             phpCAS::logout();
         });
+    }
+
+    /**
+     * Créé la connexion à la base de données
+     *
+     * @param string $host l'hôte de connexion
+     * @param string $dbname la base de données
+     * @param string $username le nom d'utilisateur
+     * @param string $password le mot de passe
+     */
+    public function connectDb($host = null, $dbname = null, $username = null, $password = null)
+    {
+        $dbs = array ();
+
+        if (null !== $host) {
+            $dbs['default'] = array(
+                'driver'    => 'pdo_mysql',
+                'host'      => $host,
+                'dbname'    => $dbname,
+                'user'      => $username,
+                'password'  => $password,
+            );
+        }
+
+        $dbs['eirbware'] = array(
+            'driver'    => 'pdo_mysql',
+            'host'      => $this['eirbware_db.host'],
+            'dbname'    => $this['eirbware_db.dbname'],
+            'user'      => $this['eirbware_db.user'],
+            'password'  => $this['eirbware_db.password'],
+        );
+
+        $this->register(new DoctrineExtension(), array(
+            'dbs.options' => $dbs,
+            'db.dbal.class_path'    => __DIR__.'/../../vendor/doctrine-dbal/lib',
+            'db.common.class_path'  => __DIR__.'/../../vendor/doctrine-common/lib',
+        ));
     }
 }
