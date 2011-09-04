@@ -1,4 +1,7 @@
 <?php
+
+namespace Jasig;
+
 /*
  * Copyright © 2003-2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
  * All rights reserved.

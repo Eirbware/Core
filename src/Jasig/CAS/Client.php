@@ -1,5 +1,7 @@
 <?php
 
+namespace Jasig;
+
 /*
  * Copyright © 2003-2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
  * All rights reserved.
@@ -2263,7 +2265,7 @@ class CAS_Client
 	 */
 	private function readURL($url, &$headers, &$body, &$err_msg)
 	{
-		$className = $this->_requestImplementation;
+		$className = sprintf('Jasig\\%s', $this->_requestImplementation);
 		$request = new $className();
 
 		if (count($this->_curl_options)) {
@@ -2599,7 +2601,7 @@ class CAS_Client
 		}
 
 		// create new DOMDocument object
-		$dom = new DOMDocument();
+		$dom = new \DOMDocument();
 		// Fix possible whitspace problems
 		$dom->preserveWhiteSpace = false;
 		// read the response of the CAS server into a DOMDocument object

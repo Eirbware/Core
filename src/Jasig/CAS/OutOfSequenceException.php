@@ -1,4 +1,7 @@
 <?php
+
+namespace Jasig;
+
 /*
  * Copyright © 2003-2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
  * All rights reserved.
@@ -37,7 +40,7 @@ require_once(dirname(__FILE__).'/Exception.php');
  *		- Changing the URL of a request after executing the request.
  */
 class CAS_OutOfSequenceException
-	extends BadMethodCallException
+	extends \BadMethodCallException
 	implements CAS_Exception
 {
 

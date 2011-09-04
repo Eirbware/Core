@@ -1,4 +1,7 @@
 <?php
+
+namespace Jasig;
+
 /*
  * Copyright © 2003-2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
  * All rights reserved.
@@ -34,7 +37,7 @@ require_once(dirname(__FILE__).'/../Exception.php');
  * An Exception for problems performing requests
  */
 class CAS_Request_Exception
-	extends Exception
+	extends \Exception
 	implements CAS_Exception
 {
 
