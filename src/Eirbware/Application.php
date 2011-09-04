@@ -24,13 +24,12 @@ class Application extends BaseApplication
      */
     private $parameters = array(
         // Paramètres du serveur CAS
-        'cas_host' => 'cas.ipb.fr',
-        'cas_port' => 443,
-        'cas_context' => '',
-        'cas_session_key'  => 'cas',
+        'cas.host' => 'cas.ipb.fr',
+        'cas.port' => 443,
+        'cas.context' => '',
 
         // Répértoire des vues
-        'views_dir' => 'views'
+        'templates.dir' => 'views'
     );
 
     /**
@@ -48,27 +47,42 @@ class Application extends BaseApplication
         $this['session']->start();
 
         $this->register(new TwigExtension(), array(
-            'twig.path'       => $this['views_dir'],
+            'twig.path'       => $this['templates.dir'],
             'twig.class_path' => __DIR__.'/../../vendor/twig/lib',
         ));
     }
 
     /**
      * Sécuriser l'accès à l'application à l'aide de CAS
+     *
+     * @param boolean $force forcer l'authentification ?
+     * @param string $logout_url URL de déconnexion
+     * @param string $login_url URL de connexion (dans le cas non-forcé)
      */
-    public function secureWithCAS($logout_url = '/logout')
+    public function secureWithCAS($force = true, $logout_url = '/logout', $login_url = '/login', $default_redirect = '/')
     {
-        // Support de l'identification
         $app = $this;
-        $this->before(function(Request $request) use ($app) {
-            phpCAS::client(CAS_VERSION_2_0, $app['cas_host'], $app['cas_port'], $app['cas_context'], false);
-            phpCAS::setNoCasServerValidation();
-            phpCAS::forceAuthentication();
-        });
+
+        phpCAS::client(CAS_VERSION_2_0, $app['cas.host'], $app['cas.port'], $app['cas.context'], false);
+        phpCAS::setNoCasServerValidation();
 
         // Obtenir l'utilisateur courant
         $this['user'] = $this->share(function() {
-            return phpCAS::getUser();
+            return phpCAS::isAuthenticated() ? phpCAS::getUser() : '';
+        });
+
+        // Lorsque l'authentification est forcé, redirection vers l'identification
+        $this->before(function(Request $request) use ($app, $force) {
+            if ($force && !$app['user']) {
+                $app['session']->set($app['cas.redirect_key'], $app['request']->getUri());
+                return $app->redirect($login_url);
+            }
+        }); 
+
+        // Connexion
+        $this->get($login_url, function() use ($app, $default_redirect) {
+            phpCAS::forceAuthentication();
+            return $app->redirect($default_redirect);
         });
 
         // Déconnexion

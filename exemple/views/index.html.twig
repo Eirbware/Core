@@ -4,6 +4,10 @@
     </head>
     <body>
         <h1>Hello world !</h1>
-        Bonjour {{ user }} !
+        {% if user %}
+            Bonjour {{ user }} ! <a href="/logout">Déconnexion</a>
+        {% else %}
+            Vous êtes inconnus, <a href="/login">identifiez-vous</a> 
+        {% endif %}
     </body>
 </html>

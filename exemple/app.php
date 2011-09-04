@@ -5,7 +5,7 @@ $app['debug'] = true;
 
 $app = new Eirbware\Application();
 
-$app->secureWithCAS();
+$app->secureWithCAS(false);
 
 $app->get('/', function() use ($app) {
     return $app['twig']->render('index.html.twig', array(
