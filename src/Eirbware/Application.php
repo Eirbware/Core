@@ -56,18 +56,24 @@ class Application extends BaseApplication
     /**
      * Sécuriser l'accès à l'application à l'aide de CAS
      */
-    public function secureWithCAS()
+    public function secureWithCAS($logout_url = '/logout')
     {
+        // Support de l'identification
         $app = $this;
-
         $this->before(function(Request $request) use ($app) {
             phpCAS::client(CAS_VERSION_2_0, $app['cas_host'], $app['cas_port'], $app['cas_context'], false);
             phpCAS::setNoCasServerValidation();
             phpCAS::forceAuthentication();
         });
 
+        // Obtenir l'utilisateur courant
         $this['user'] = $this->share(function() {
             return phpCAS::getUser();
+        });
+
+        // Déconnexion
+        $this->get($logout_url, function() {
+            phpCAS::logout();
         });
     }
 }
