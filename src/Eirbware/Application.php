@@ -61,7 +61,7 @@ class Application extends BaseApplication
      * @param string $logout_url URL de déconnexion
      * @param string $login_url URL de connexion (dans le cas non-forcé)
      */
-    public function secureWithCAS($force = true, $logout_url = '/logout', $login_url = '/login', $default_redirect = '/')
+    public function secureWithCAS($force = true, $login_url = '/login', $logout_url = '/logout', $redirect = '/')
     {
         $app = $this;
 
@@ -79,12 +79,12 @@ class Application extends BaseApplication
                 $app['session']->set($app['cas.redirect_key'], $app['request']->getUri());
                 return $app->redirect($login_url);
             }
-        }); 
+        });
 
         // Connexion
-        $this->get($login_url, function() use ($app, $default_redirect) {
+        $this->get($login_url, function() use ($app, $redirect) {
             phpCAS::forceAuthentication();
-            return $app->redirect($default_redirect);
+            return $app->redirect($redirect);
         });
 
         // Déconnexion
