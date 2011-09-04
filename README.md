@@ -75,6 +75,7 @@ $app->get('/test', function() use ($app) {
 //...
 ```
 
+Voir :
 * [L'extension Twig de Silex](http://silex.sensiolabs.org/doc/extensions/twig.html)
 * [La documentation de Twig](http://twig.sensiolabs.org/documentation)
 
@@ -90,5 +91,5 @@ peut être utilisé :
 $app->connectDb('host', 'base', 'user', 'pass');
 //..
 ```
-
+Voir :
 * [L'extension Doctrine de Silex](http://silex.sensiolabs.org/doc/extensions/doctrine.html)
