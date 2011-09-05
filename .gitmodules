@@ -1,6 +1,6 @@
 [submodule "vendor/twig"]
 	path = vendor/twig
-	url = git://github.com/fabpot/Twig.git
+	url = https://github.com/fabpot/Twig.git
 [submodule "vendor/doctrine-common"]
 	path = vendor/doctrine-common
 	url = https://github.com/doctrine/common
@@ -9,4 +9,4 @@
 	url = https://github.com/doctrine/dbal
 [submodule "src/Gregwar/DSD"]
 	path = src/Gregwar/DSD
-	url = git://github.com/Gregwar/DSD.git
+	url = https://Gregwar@github.com/Gregwar/DSD.git
