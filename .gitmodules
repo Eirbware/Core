@@ -9,4 +9,4 @@
 	url = https://github.com/doctrine/dbal
 [submodule "src/Gregwar/DSD"]
 	path = src/Gregwar/DSD
-	url = https://Gregwar@github.com/Gregwar/DSD.git
+	url = https://github.com/Gregwar/DSD.git
