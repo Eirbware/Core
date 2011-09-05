@@ -7,3 +7,6 @@
 [submodule "vendor/doctrine-dbal"]
 	path = vendor/doctrine-dbal
 	url = https://github.com/doctrine/dbal
+[submodule "src/Gregwar/DSD"]
+	path = src/Gregwar/DSD
+	url = git://github.com/Gregwar/DSD.git

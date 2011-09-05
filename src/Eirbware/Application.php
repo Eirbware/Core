@@ -137,4 +137,15 @@ class Application extends BaseApplication
             'db.common.class_path'  => __DIR__.'/../../vendor/doctrine-common/lib',
         ));
     }
+
+    /**
+     * Fonction render, raccourcie pour Twig
+     *
+     * @param string $template la template à rendre
+     * @param array $parametres les paramètres de template
+     */
+    public function render($template, array $parameters = array())
+    {
+        return $this['twig']->render($template, $parametres);
+    }
 }
