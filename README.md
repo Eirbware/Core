@@ -99,3 +99,14 @@ Application d'exemple
 
 Ce dépôt contient une application d'exemple sous `exemple/`, consultez la pour découvrir
 les fonctionnalités !
+
+Note de développement
+---------------------
+
+Si vous comptez utiliser le noyau Eirbware sur une autre machine que notre serveur de production,
+clonez ce dépôt et tappez:
+
+    git submodule init
+    git submodule update
+
+Pour télécharger les bibliothèques des dépendances, et vous pourrez commencer à travailler !
