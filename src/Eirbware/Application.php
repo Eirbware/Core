@@ -144,7 +144,7 @@ class Application extends BaseApplication
      * @param string $template la template à rendre
      * @param array $parametres les paramètres de template
      */
-    public function render($template, array $parameters = array())
+    public function render($template, array $parametres = array())
     {
         return $this['twig']->render($template, $parametres);
     }

@@ -1,0 +1,8 @@
+{% extends 'index.html.twig' %}
+
+{% block body %}
+    {% if type %}
+        Vous avez tappé: {{ type }}
+    {% endif %}
+    {{ form|raw }}
+{% endblock %}

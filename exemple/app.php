@@ -24,4 +24,23 @@ $app->get('/personnes', function() use ($app) {
     ));
 });
 
+/**
+ * Formulaire de démonstration
+ *
+ * (Match support GET et POST)
+ */
+$app->match('/form', function() use ($app) {
+    $form = new Gregwar\DSD\Form('forms/demo.html');
+
+    $type = null;
+    if ($form->posted()) {
+        $type = $form->champ;
+    }
+
+    return $app->render('form.html.twig', array(
+        'form' => $form,
+        'type' => $type
+    ));
+});
+
 $app->run();
