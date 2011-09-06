@@ -4,3 +4,6 @@
 [submodule "vendor/silex"]
 	path = vendor/silex
 	url = https://github.com/fabpot/Silex
+[submodule "src/Gregwar/Image"]
+	path = src/Gregwar/Image
+	url = https://github.com/Gregwar/Image.git
