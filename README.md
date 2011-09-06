@@ -113,3 +113,8 @@ clonez ce dépôt et tappez :
     git submodule update
 
 Pour télécharger les bibliothèques des dépendances, et vous pourrez commencer à travailler !
+
+License
+-------
+
+Le noyau d'Eirbware est sous license MIT.
