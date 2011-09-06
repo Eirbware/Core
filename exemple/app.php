@@ -3,7 +3,10 @@ include(__DIR__.'/../autoload.php');
 
 $app = new Eirbware\Application();
 
-$app->secure(false, '/login', '/logout', 'app.php');
+$app['security']->secure(array(
+    'force_auth' => false,
+    'redirect' => '../app.php',
+));
 $app->connectDb('localhost', 'eirbware', 'root', 'admin');
 
 /**

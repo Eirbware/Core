@@ -8,11 +8,6 @@ use Silex\Extension\SessionExtension;
 use Silex\Extension\TwigExtension;
 use Silex\Extension\DoctrineExtension;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
-use Jasig\phpCAS;
-
 /**
  * Classe de base pour les applications web de Eirbware
  *
@@ -46,6 +41,7 @@ class Application extends BaseApplication
     public function __construct(array $parameters = array())
     {
         parent::__construct();
+        $app = $this;
 
         $parameters = array_replace($this->defaultParameters, $parameters);
 
@@ -53,52 +49,20 @@ class Application extends BaseApplication
             $this[$key] = $value;
         }
 
+        // Sécurité
+        $this['security'] = $this->share(function() use ($app) {
+            return new Security($app);
+        });
+
+        // Session 
         $this->register(new SessionExtension());
         $this['session']->start();
 
+        // Extension Twig
         $this->register(new TwigExtension(), array(
             'twig.path'       => $this['templates.dir'],
             'twig.class_path' => __DIR__.'/../../vendor/twig/lib',
         ));
-    }
-
-    /**
-     * Sécuriser l'accès à l'application à l'aide de CAS
-     *
-     * @param boolean $force forcer l'authentification ?
-     * @param string $logout_url URL de déconnexion
-     * @param string $login_url URL de connexion (dans le cas non-forcé)
-     */
-    public function secure($force = true, $login_url = '/login', $logout_url = '/logout', $redirect = '/')
-    {
-        $app = $this;
-
-        phpCAS::client(CAS_VERSION_2_0, $app['cas.host'], $app['cas.port'], $app['cas.context'], false);
-        phpCAS::setNoCasServerValidation();
-
-        // Obtenir l'utilisateur courant
-        $this['user'] = $this->share(function() {
-            return phpCAS::isAuthenticated() ? (new User(phpCAS::getUser())) : null;
-        });
-
-        // Lorsque l'authentification est forcé, redirection vers l'identification
-        $this->before(function(Request $request) use ($app, $force) {
-            if ($force && !$app['user']) {
-                $app['session']->set($app['cas.redirect_key'], $app['request']->getUri());
-                return $app->redirect($login_url);
-            }
-        });
-
-        // Connexion
-        $this->get($login_url, function() use ($app, $redirect) {
-            phpCAS::forceAuthentication();
-            return $app->redirect($redirect);
-        });
-
-        // Déconnexion
-        $this->get($logout_url, function() {
-            phpCAS::logout();
-        });
     }
 
     /**
