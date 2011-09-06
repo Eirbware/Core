@@ -104,8 +104,11 @@ Note de développement
 ---------------------
 
 Si vous comptez utiliser le noyau Eirbware sur une autre machine que notre serveur de production,
-clonez ce dépôt et tappez:
+clonez ce dépôt et tappez :
 
+    git submodule init
+    git submodule update
+    cd vendor/silex
     git submodule init
     git submodule update
 
