@@ -1,7 +1,6 @@
 <?php
 include(__DIR__.'/src/Eirbware/ClassLoader.php');
-
-include('vendor/silex/autoload.php');
+include(__DIR__.'/vendor/silex/autoload.php');
 
 $loader = new Eirbware\ClassLoader();
 
