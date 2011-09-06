@@ -95,7 +95,7 @@ class Security
      */
     public function logout()
     {
-        $this->app['session']->remove('user');
+        $this->app['session']->remove($this->app['security.session_key']);
         phpCAS::logout();
     }
 
@@ -104,7 +104,11 @@ class Security
      */
     public function getUser()
     {
-        return $this->app['session']->has('user') ? $this->app['session']->get('user') : null;
+        if ($this->app['session']->has($this->app['security.session_key'])) {
+            return $this->app['session']->get($this->app['security.session_key']);
+        }
+        
+        return null;
     }
 
     /**
@@ -114,6 +118,6 @@ class Security
      */
     public function setUser($user)
     {
-        $this->app['session']->set('user', $user);
+        $this->app['session']->set($this->app['security.session_key'], $user);
     }
 }

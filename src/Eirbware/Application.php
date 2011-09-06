@@ -24,8 +24,11 @@ class Application extends BaseApplication
         'cas.port' => 443,
         'cas.context' => '',
 
+        // Paramètres de sécurité
+        'security.session_key' => 'user',
+
         // Paramètres pour la base de données de Eirbware 
-        // (accès en lecture seule)
+        // (accès en lecture seule pour les utilisateurs)
         'eirbware_db.host' => 'localhost',
         'eirbware_db.dbname' => 'eirbware',
         'eirbware_db.user' => 'root',
