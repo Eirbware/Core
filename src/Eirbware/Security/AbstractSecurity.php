@@ -1,19 +1,16 @@
 <?php
 
-namespace Eirbware;
+namespace Eirbware\Security;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
-use Jasig\phpCAS;
-
 
 /**
  * Gestion de la sécurité de l'application
  *
  * @author Grégoire Passault <g.passault@gmail.com>
  */
-class Security
+abstract class AbstractSecurity
 {
     /**
      * Paramètres de sécurité par défaut
@@ -29,25 +26,26 @@ class Security
     /**
      * Application
      */
-    private $app;
+    protected $app;
 
     public function __construct($app)
     {
         $this->app = $app;
+        $self = $this;
 
         // Gestionnaire d'utilisateurs
         $app['users'] = $app->share(function() use ($app) {
-            return new UsersManager($app['dbs']['eirbware']);
+            return new UserProvider($app['dbs']['eirbware']);
         });
 
         // Obtenir l'utilisateur courant, stocké dans la session
-        $app['user'] = $app->share(function() use ($app) {
-            return $app['security']->getUser();
+        $app['user'] = $app->share(function() use ($app, $self) {
+            return $self->getUser();
         });
     }
 
     /**
-     * Sécuriser l'accès à l'application à l'aide de CAS
+     * Sécuriser l'accès à l'application
      *
      * @param array $options les options
      */
@@ -55,9 +53,9 @@ class Security
     {
         $options = array_replace(self::$options, $options);
         $app = $this->app;
+        $self = $this;
 
-        phpCAS::client(CAS_VERSION_2_0, $app['cas.host'], $app['cas.port'], $app['cas.context'], false);
-        phpCAS::setNoCasServerValidation();
+        $self->initialize();
 
         // Lorsque l'authentification est forcé, redirection vers l'identification
         $app->before(function(Request $request) use ($app, $options) {
@@ -67,25 +65,27 @@ class Security
         });
 
         // Connexion
-        $app->get($options['login_url'], function() use ($app, $options) {
-            phpCAS::forceAuthentication();
-
-            $user = new User(phpCAS::getUser());
+        $app->get($options['login_url'], function() use ($app, $options, $self) {
+            $user = $self->authenticate();
 
             if (($callback = $options['callback']) !== null) {
-                if (!$callback($user)) {
-                    return $app->abort(403, 'Acces denied');
-                }
+                $return = $callback($user);
+            } else {
+                $return = true;
             }
 
-            $app['security']->setUser($user);
+            if (!($user && $return)) {
+                return $app->abort(403, 'Acces denied');
+            }
+
+            $self->setUser($user);
 
             return $app->redirect($options['redirect']);
         });
 
         // Déconnexion
-        $app->get($options['logout_url'], function() use ($app, $options) {
-            $app['security']->logout();
+        $app->get($options['logout_url'], function() use ($app, $options, $self) {
+            $self->logout();
             return $app->redirect($options['redirect']);
         });
     }
@@ -96,7 +96,6 @@ class Security
     public function logout()
     {
         $this->app['session']->remove($this->app['security.session_key']);
-        phpCAS::logout();
     }
 
     /**
@@ -120,4 +119,14 @@ class Security
     {
         $this->app['session']->set($this->app['security.session_key'], $user);
     }
+
+    /**
+     * Initialiser le module de sécurité
+     */
+    public abstract function initialize();
+
+    /**
+     * Authentifier l'utilisateur
+     */
+    public abstract function authenticate();
 }

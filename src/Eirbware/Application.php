@@ -52,9 +52,9 @@ class Application extends BaseApplication
             $this[$key] = $value;
         }
 
-        // Sécurité
+        // Sécurité CAS
         $this['security'] = $this->share(function() use ($app) {
-            return new Security($app);
+            return new Security\CAS($app);
         });
 
         // Session 

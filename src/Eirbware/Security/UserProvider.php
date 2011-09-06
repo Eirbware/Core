@@ -1,13 +1,13 @@
 <?php
 
-namespace Eirbware;
+namespace Eirbware\Security;
 
 /**
  * Classe permettant d'intéragir avec les utilisateurs disponibles
  *
  * @author Grégoire Passault <g.passault@gmail.com>
  */
-class UsersManager
+class UserProvider
 {
     /**
      * Base de donnée
