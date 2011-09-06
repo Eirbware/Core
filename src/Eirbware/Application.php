@@ -69,7 +69,7 @@ class Application extends BaseApplication
      * @param string $logout_url URL de déconnexion
      * @param string $login_url URL de connexion (dans le cas non-forcé)
      */
-    public function secureWithCAS($force = true, $login_url = '/login', $logout_url = '/logout', $redirect = '/')
+    public function secure($force = true, $login_url = '/login', $logout_url = '/logout', $redirect = '/')
     {
         $app = $this;
 
@@ -78,7 +78,7 @@ class Application extends BaseApplication
 
         // Obtenir l'utilisateur courant
         $this['user'] = $this->share(function() {
-            return phpCAS::isAuthenticated() ? phpCAS::getUser() : '';
+            return phpCAS::isAuthenticated() ? (new User(phpCAS::getUser())) : null;
         });
 
         // Lorsque l'authentification est forcé, redirection vers l'identification

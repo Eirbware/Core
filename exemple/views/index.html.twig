@@ -6,9 +6,9 @@
         {% block body %}
         <h1>Bienvenue !</h1>
         {% if user %}
-            Bonjour {{ user }} ! <a href="/logout">Déconnexion</a>
+            Bonjour {{ user.login }} ! <a href="app.php/logout">Déconnexion</a>
         {% else %}
-            Vous êtes inconnus, <a href="/login">identifiez-vous</a> 
+            Vous êtes inconnus, <a href="app.php/login">identifiez-vous</a> 
         {% endif %}
         {% endblock %}
     </body>
