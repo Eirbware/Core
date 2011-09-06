@@ -2,6 +2,8 @@
 
 namespace Eirbware\Security;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use Jasig\phpCAS;
 
 /**
@@ -14,7 +16,7 @@ class CAS extends AbstractSecurity
     /**
      * Initialiser CAS
      */
-    public function initialize()
+    public function initialize(array &$options)
     {
         phpCAS::client(
             CAS_VERSION_2_0, 
@@ -24,12 +26,16 @@ class CAS extends AbstractSecurity
             false
         );
         phpCAS::setNoCasServerValidation();
+
+        $options['login_check_url'] = $options['login_url'];
     }
 
     /**
      * Authentifier l'utilisateur
+     *
+     * @param Request $request la requête
      */
-    public function authenticate()
+    public function authenticate(array &$options, Request $request)
     {
         phpCAS::forceAuthentication();
         return new User(phpCAS::getUser());

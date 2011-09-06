@@ -3,7 +3,6 @@
 namespace Eirbware\Security;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Gestion de la sécurité de l'application
@@ -17,6 +16,7 @@ abstract class AbstractSecurity
      */
     public static $options = array(
         'force_auth' => true,
+        'login_check_url' => '/login_check',
         'login_url' => '/login',
         'logout_url' => '/logout',
         'redirect' => '/',
@@ -55,7 +55,7 @@ abstract class AbstractSecurity
         $app = $this->app;
         $self = $this;
 
-        $self->initialize();
+        $self->initialize($options);
 
         // Lorsque l'authentification est forcé, redirection vers l'identification
         $app->before(function(Request $request) use ($app, $options) {
@@ -65,8 +65,8 @@ abstract class AbstractSecurity
         });
 
         // Connexion
-        $app->get($options['login_url'], function() use ($app, $options, $self) {
-            $user = $self->authenticate();
+        $app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
+            $user = $self->authenticate($options, $request);
 
             if (($callback = $options['callback']) !== null) {
                 $return = $callback($user);
@@ -123,10 +123,10 @@ abstract class AbstractSecurity
     /**
      * Initialiser le module de sécurité
      */
-    public abstract function initialize();
+    public abstract function initialize(array &$options);
 
     /**
      * Authentifier l'utilisateur
      */
-    public abstract function authenticate();
+    public abstract function authenticate(array &$options, Request $request);
 }
