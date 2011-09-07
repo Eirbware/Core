@@ -20,18 +20,6 @@ class UsersManager
     }
 
     /**
-     * Gérer un utilisateur
-     *
-     * @param User l'utilisateur
-     */
-    public function manage($user)
-    {
-	if (is_object($user)) {
-	    $user->setManager($this);
-	}
-    }
-
-    /**
      * Obtenir les données utilisateur par login
      *
      * @param $login l'identifiant

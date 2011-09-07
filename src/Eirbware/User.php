@@ -15,9 +15,9 @@ class User
     protected $login;
 
     /**
-     * Référence vers le manager
+     * Application
      */
-    protected $manager;
+    protected $app;
 
     /**
      * Données provenant de la base de données
@@ -29,17 +29,18 @@ class User
      */
     protected $loaded = false;
 
-    public function __construct($login, $manager = null)
+    public function __construct($login, $app = null)
     {
 	$this->login = $login;
+	$this->app = $app;
     }
 
     /**
-     * Définir le manager
+     * Définir l'application
      */
-    public function setManager($manager)
+    public function setApp($app)
     {
-	$this->manager = $manager;
+	$this->app = $app;
     }
 
     /**
@@ -123,8 +124,8 @@ class User
      */
     public function load()
     {
-	if (!$this->loaded && $this->manager) {
-	    $this->datas = $this->manager->getByLogin($this->getLogin()); 
+	if (!$this->loaded && $this->app) {
+	    $this->datas = $this->app['users']->getByLogin($this->getLogin()); 
 	    $this->loaded = true;
 	}
 	return (null !== $this->datas);
