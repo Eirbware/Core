@@ -7,7 +7,7 @@ $app['security']->secure(array(
     'force_auth' => false,
     'redirect' => '../app.php',
 ));
-$app->connectDb('localhost', 'eirbware', 'root', 'admin');
+$app->connectDb();
 
 /**
  * Page principale

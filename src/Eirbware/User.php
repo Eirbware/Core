@@ -91,6 +91,14 @@ class User
     }
 
     /**
+     * ID de la filière
+     */
+    public function getFiliereId()
+    {
+	return $this->load() ? $this->datas['filiere_id'] : null;
+    }
+
+    /**
      * Nom de la filière de l'utilisateur
      */
     public function getFiliereNom()
