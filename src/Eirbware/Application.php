@@ -57,6 +57,11 @@ class Application extends BaseApplication
             return new Security\CAS($app);
         });
 
+        // Gestionnaire d'utilisateurs
+        $app['users'] = $app->share(function() use ($app) {
+            return new UserProvider($app['dbs']['eirbware']);
+        });
+
         // Session 
         $this->register(new SessionExtension());
         $this['session']->start();

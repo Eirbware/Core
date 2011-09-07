@@ -4,6 +4,8 @@ namespace Eirbware\Security;
 
 use Symfony\Component\HttpFoundation\Request;
 
+use Eirbware\User;
+
 /**
  * Gestion de la sécurité de l'application
  *
@@ -32,11 +34,6 @@ abstract class AbstractSecurity
     {
         $this->app = $app;
         $self = $this;
-
-        // Gestionnaire d'utilisateurs
-        $app['users'] = $app->share(function() use ($app) {
-            return new UserProvider($app['dbs']['eirbware']);
-        });
 
         // Obtenir l'utilisateur courant, stocké dans la session
         $app['user'] = $app->share(function() use ($app, $self) {
