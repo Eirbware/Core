@@ -60,7 +60,10 @@ class Application extends BaseApplication
         // Obtenir l'utilisateur courant, stocké dans la session
         $app['user'] = $app->share(function() use ($app) {
 	    $user = $app['security']->getUser();
-	    $user->setManager($app['users']);
+
+	    if ($user instanceof Eirbware\User) {
+		$user->setManager($app['users']);
+	    }
 
 	    return $user;
         });
