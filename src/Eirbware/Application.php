@@ -64,7 +64,7 @@ class Application extends BaseApplication
         $app['user'] = $app->share(function() use ($app) {
 	    $user = $app['security']->getUser();
 
-	    if ($user instanceof User) {
+	    if (is_object($user)) {
 		$user->setManager($app['users']);
 	    }
 
