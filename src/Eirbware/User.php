@@ -62,6 +62,8 @@ class User
 
     public function __get($property)
     {
+	$this->load();
+
 	if (isset($this->datas[$property])) {
 	    return $this->datas[$property];
 	} else { 
