@@ -61,7 +61,7 @@ class Application extends BaseApplication
         $app['user'] = $app->share(function() use ($app) {
 	    $user = $app['security']->getUser();
 
-	    if ($user instanceof Eirbware\User) {
+	    if ($user instanceof User) {
 		$user->setManager($app['users']);
 	    }
 
