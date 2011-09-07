@@ -33,12 +33,6 @@ abstract class AbstractSecurity
     public function __construct($app)
     {
         $this->app = $app;
-        $self = $this;
-
-        // Obtenir l'utilisateur courant, stocké dans la session
-        $app['user'] = $app->share(function() use ($app, $self) {
-            return $self->getUser();
-        });
     }
 
     /**

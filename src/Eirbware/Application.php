@@ -31,8 +31,8 @@ class Application extends BaseApplication
         // (accès en lecture seule pour les utilisateurs)
         'eirbware_db.host' => 'localhost',
         'eirbware_db.dbname' => 'eirbware',
-        'eirbware_db.user' => 'root',
-        'eirbware_db.password' => 'admin',
+        'eirbware_db.user' => 'eirbware',
+        'eirbware_db.password' => 'eirbware',
 
         // Répértoire des vues
         'templates.dir' => 'views'
@@ -57,9 +57,17 @@ class Application extends BaseApplication
             return new Security\CAS($app);
         });
 
+        // Obtenir l'utilisateur courant, stocké dans la session
+        $app['user'] = $app->share(function() use ($app) {
+	    $user = $app['security']->getUser();
+	    $user->setManager($app['users']);
+
+	    return $user;
+        });
+
         // Gestionnaire d'utilisateurs
         $app['users'] = $app->share(function() use ($app) {
-            return new UserProvider($app['dbs']['eirbware']);
+            return new UsersManager($app['dbs']['eirbware']);
         });
 
         // Session 
@@ -69,7 +77,7 @@ class Application extends BaseApplication
         // Extension Twig
         $this->register(new TwigExtension(), array(
             'twig.path'       => $this['templates.dir'],
-            'twig.class_path' => __DIR__.'/../../vendor/twig/lib',
+            'twig.class_path' => __DIR__.'/../../vendor/silex/vendor/twig/lib',
         ));
     }
 
@@ -105,8 +113,8 @@ class Application extends BaseApplication
 
         $this->register(new DoctrineExtension(), array(
             'dbs.options' => $dbs,
-            'db.dbal.class_path'    => __DIR__.'/../../vendor/doctrine-dbal/lib',
-            'db.common.class_path'  => __DIR__.'/../../vendor/doctrine-common/lib',
+            'db.dbal.class_path'    => __DIR__.'/../../vendor/silex/vendor/doctrine-dbal/lib',
+            'db.common.class_path'  => __DIR__.'/../../vendor/silex/vendor/doctrine-common/lib',
         ));
     }
 
