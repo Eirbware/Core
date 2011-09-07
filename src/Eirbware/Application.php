@@ -127,6 +127,10 @@ class Application extends BaseApplication
 	));
 
 	$this['dbs']['eirbware']->query('SET CHARACTER SET UTF8');
+
+	if (null !== $host) {
+	    $this['db']->query('SET CHARACTER SET UTF8');
+	}
     }
 
     /**
