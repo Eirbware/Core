@@ -38,7 +38,7 @@ class CAS extends AbstractSecurity
     public function authenticate(array &$options, Request $request)
     {
         phpCAS::forceAuthentication();
-        return new User(phpCAS::getUser());
+        return phpCAS::getUser();
     }
 
     /**

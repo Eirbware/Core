@@ -66,7 +66,8 @@ abstract class AbstractSecurity
 
         // Connexion
         $app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
-            $user = $self->authenticate($options, $request);
+
+            $user = new User($self->authenticate($options, $request));
 
             if (($callback = $options['callback']) !== null) {
                 $return = $callback($user);
@@ -123,7 +124,9 @@ abstract class AbstractSecurity
     /**
      * Initialiser le module de sécurité
      */
-    public abstract function initialize(array &$options);
+    public function initialize(array &$options) 
+    {
+    }
 
     /**
      * Authentifier l'utilisateur
