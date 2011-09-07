@@ -57,7 +57,7 @@ class User
     public function __call($method, $args)
     {
 	$property = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $method));
-	return $this->__get($method);
+	return $this->__get($property);
     }
 
     public function __get($property)
