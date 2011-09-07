@@ -1,6 +1,6 @@
 <?php
 
-namespace Eirbware\Security;
+namespace Eirbware;
 
 /**
  * Classe permettant d'intéragir avec les utilisateurs disponibles

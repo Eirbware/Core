@@ -20,9 +20,9 @@ class Application extends BaseApplication
      */
     private $defaultParameters = array(
         // Paramètres du serveur CAS
-        'cas.host' => 'cas.ipb.fr',
+        'cas.host' => 'cas.enseirb-matmeca.fr',
         'cas.port' => 443,
-        'cas.context' => '',
+        'cas.context' => 'cas',
 
         // Paramètres de sécurité
         'security.session_key' => 'user',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Eirbware\Security;
+namespace Eirbware;
 
 /**
  * Représente un utilisateur
