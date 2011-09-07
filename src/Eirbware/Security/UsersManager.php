@@ -7,7 +7,7 @@ namespace Eirbware\Security;
  *
  * @author Grégoire Passault <g.passault@gmail.com>
  */
-class UserProvider
+class UsersManager
 {
     /**
      * Base de donnée
