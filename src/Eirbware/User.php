@@ -44,19 +44,28 @@ class User
     }
 
     /**
+     * Login
+     */
+    public function getLogin()
+    {
+	return $this->login;
+    }
+
+    /**
      * Getters
      */
     public function __call($method, $args)
     {
-	if (preg_match('#^get#', $method)) {
-	    $property = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', substr($method, 3)));
-	    if (isset($this->datas[$property])) {
-		return $this->datas[$property];
-	    } else { 
-		return null;
-	    }
-	} else {
-	    throw new \RuntimeException('Unknown method: '.$method);
+	$property = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $method));
+	return $this->__get($method);
+    }
+
+    public function __get($property)
+    {
+	if (isset($this->datas[$property])) {
+	    return $this->datas[$property];
+	} else { 
+	    return null;
 	}
     }
 
@@ -66,10 +75,34 @@ class User
     public function load()
     {
 	if (!$this->loaded && $this->app) {
-	    $this->datas = $this->app['users']->getByLogin($this->getLogin()); 
+	    $this->doLoad();
 	    $this->loaded = true;
 	}
 	return (null !== $this->datas);
+    }
+
+    /**
+     * Charger les données
+     */
+    public function doLoad()
+    {
+	$this->datas = $this->app['users']->getByLogin($this->getLogin()); 
+    }
+
+    /**
+     * Recharger les données
+     */
+    public function reload()
+    {
+	$this->doLoad();
+    }
+
+    /**
+     * Existe t-il ?
+     */
+    public function exists()
+    {
+	return $this->load();
     }
 
     /**
