@@ -124,7 +124,9 @@ class Application extends BaseApplication
             'dbs.options' => $dbs,
             'db.dbal.class_path'    => __DIR__.'/../../vendor/silex/vendor/doctrine-dbal/lib',
             'db.common.class_path'  => __DIR__.'/../../vendor/silex/vendor/doctrine-common/lib',
-        ));
+	));
+
+	$this['dbs']['eirbware']->query('SET CHARACTER SET UTF8');
     }
 
     /**
