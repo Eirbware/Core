@@ -49,7 +49,10 @@ abstract class AbstractSecurity
         $self->initialize($options);
 
         // Lorsque l'authentification est forcé, redirection vers l'identification
-        $app->before(function(Request $request) use ($app, $options) {
+	$app->before(function(Request $request) use ($app, $options) { 
+	    if ($app['request']->getPathInfo() == $options['login_check_url']) {
+		return;
+	    }
             if ($options['force_auth'] && !$app['user']) {
                 return $app->redirect($options['login_url']);
             }
