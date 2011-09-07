@@ -62,7 +62,8 @@ abstract class AbstractSecurity
 	$app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
 	    $user_class = $app['user.class'];
 
-            $user = new $user_class($self->authenticate($options, $request));
+	    $user = new $user_class($self->authenticate($options, $request));
+	    $app['users']->manage($user);
 
             if (($callback = $options['callback']) !== null) {
                 $return = $callback($user);
