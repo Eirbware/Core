@@ -44,80 +44,21 @@ class User
     }
 
     /**
-     * Obtenir le login
+     * Getters
      */
-    public function getLogin()
+    public function __call($method, $args)
     {
-        return $this->login;
+	if (preg_match('#^get#', $method)) {
+	    $property = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', substr($method, 3)));
+	    if (isset($this->datas[$property])) {
+		return $this->datas[$property];
+	    } else { 
+		return null;
+	    }
+	} else {
+	    throw new \RuntimeException('Unknown method: '.$method);
+	}
     }
-
-    /**
-     * L'utilisateur existe t-il dans la base de données ?
-     */
-    public function exists()
-    {
-	return $this->load();
-    }
-
-    /**
-     * ID de l'utilisateur
-     */
-    public function getId()
-    {
-	return $this->load() ? $this->datas['id'] : null;
-    }
-
-    /**
-     * Nom de l'utilisateur
-     */
-    public function getNom()
-    {
-	return $this->load() ? $this->datas['nom'] : null;
-    }
-
-    /**
-     * Prénom de l'utilisateur
-     */
-    public function getPrenom()
-    {
-	return $this->load() ? $this->datas['prenom'] : null;
-    }
-
-    /**
-     * Filière de l'utilisateur
-     */
-    public function getFiliere()
-    {
-	return $this->load() ? $this->datas['filiere_id_syllabus'] : null;
-    }
-
-    /**
-     * ID de la filière
-     */
-    public function getFiliereId()
-    {
-	return $this->load() ? $this->datas['filiere_id'] : null;
-    }
-
-    /**
-     * Nom de la filière de l'utilisateur
-     */
-    public function getFiliereNom()
-    {
-	return $this->load() ? $this->datas['filiere_nom'] : null;
-    }
-
-    /**
-     * Année de l'utilisateur
-     */
-    public function getAnnee()
-    {
-	return $this->load() ? $this->datas['annee'] : null;
-    }
-
-    /**
-     * Nom de l'utilisateur
-     */
 
     /**
      * Charger l'utilisateur depuis la base
