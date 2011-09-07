@@ -35,7 +35,10 @@ class Application extends BaseApplication
         'eirbware_db.password' => 'eirbware',
 
         // Répértoire des vues
-        'templates.dir' => 'views'
+	'templates.dir' => 'views',
+
+	// Classe à utiliser pour les utilisateurs
+	'user.class' => '\Eirbware\User',
     );
 
     /**
