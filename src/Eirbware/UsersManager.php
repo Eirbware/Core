@@ -74,4 +74,16 @@ class UsersManager
     {
 	return $this->db->fetchAll('SELECT * FROM filieres');
     }
+
+    /**
+     * Obtenir une filière par code syllabus
+     *
+     * @param string $code le code syllabus
+     *
+     * @return array la filiere
+     */
+    public function getFiliere($syllabus)
+    {
+        return $this->db->fetchAssoc('SELECT * FROM filieres WHERE id_syllabus = ?', array($syllabus));
+    }
 }
