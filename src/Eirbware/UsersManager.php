@@ -34,7 +34,7 @@ class UsersManager
      */
     public function getByLogin($login)
     {
-	$query = $this->db->prepare('SELECT logins.id, logins.prenom, logins.nom, logins.annee,
+	$query = $this->db->prepare('SELECT logins.id as eid, logins.prenom, logins.nom, logins.annee,
 	    filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id
 	    FROM logins 
 	    INNER JOIN filieres ON logins.filiere_id = filieres.id 
