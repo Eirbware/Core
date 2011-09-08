@@ -80,7 +80,7 @@ class User
 	    $this->doLoad();
 	    $this->loaded = true;
 	}
-	return (null !== $this->datas);
+	return (bool)($this->datas);
     }
 
     /**
