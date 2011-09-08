@@ -4,8 +4,6 @@ namespace Eirbware\Security;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Eirbware\User;
-
 /**
  * Gestion de la sécurité de l'application
  *

@@ -74,11 +74,7 @@ class Application extends BaseApplication
 
         // Gestionnaire d'utilisateurs
 	$app['users'] = $app->share(function() use ($app) {
-	    if (isset($app['dbs'])) {
-		return new UsersManager($app['dbs']['eirbware']);
-	    } else {
-		return null;
-	    }
+	    return new UsersManager($app);
         });
 
         // Session 
