@@ -10,13 +10,19 @@ namespace Eirbware;
 class UsersManager
 {
     /**
-     * Base de donnée
+     * Application
      */
     protected $app;
+
+    /**
+     * Base de données
+     */
+    protected $db;
 
     public function __construct($app)
     {
         $this->app = $app;
+        $this->db = $app['dbs']['eirbware'];
     }
 
     /**
@@ -28,7 +34,7 @@ class UsersManager
      */
     public function getByLogin($login)
     {
-	$query = $this->app['db']->prepare('SELECT logins.id, logins.prenom, logins.nom, logins.annee,
+	$query = $this->db->prepare('SELECT logins.id, logins.prenom, logins.nom, logins.annee,
 	    filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id
 	    FROM logins 
 	    INNER JOIN filieres ON logins.filiere_id = filieres.id 
@@ -62,7 +68,7 @@ class UsersManager
 	    $sql.= ' WHERE '.implode(' AND ', $conds);
 	}
 
-	return $this->app['db']->fetchAll($sql, $params);
+	return $this->db->fetchAll($sql, $params);
     }
 
     /**
@@ -84,7 +90,7 @@ class UsersManager
      */
     public function getFilieres()
     {
-	return $this->app['db']->fetchAll('SELECT * FROM filieres');
+	return $this->db->fetchAll('SELECT * FROM filieres');
     }
 
     /**
@@ -96,6 +102,6 @@ class UsersManager
      */
     public function getFiliere($syllabus)
     {
-        return $this->app['db']->fetchAssoc('SELECT * FROM filieres WHERE id_syllabus = ?', array($syllabus));
+        return $this->db->fetchAssoc('SELECT * FROM filieres WHERE id_syllabus = ?', array($syllabus));
     }
 }
