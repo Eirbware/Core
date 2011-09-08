@@ -8,6 +8,8 @@ use Silex\Extension\SessionExtension;
 use Silex\Extension\TwigExtension;
 use Silex\Extension\DoctrineExtension;
 
+use Eirbware\Twig\ImageExtension;
+
 /**
  * Classe de base pour les applications web de Eirbware
  *
@@ -86,8 +88,15 @@ class Application extends BaseApplication
         // Extension Twig
         $this->register(new TwigExtension(), array(
             'twig.path'       => $this['templates.dir'],
-            'twig.class_path' => __DIR__.'/../../vendor/silex/vendor/twig/lib',
-        ));
+	    'twig.class_path' => __DIR__.'/../../vendor/silex/vendor/twig/lib',
+	));
+
+	// Ajout de l'extension Image
+        $oldConfigure = isset($app['twig.configure']) ? $app['twig.configure']: function(){};
+	$app['twig.configure'] = $app->protect(function($twig) use ($oldConfigure, $app) {
+	    $oldConfigure($twig);
+	    $twig->addExtension(new ImageExtension);
+	});
     }
 
     /**
