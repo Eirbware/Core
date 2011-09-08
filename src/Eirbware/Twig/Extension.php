@@ -13,7 +13,7 @@ class Extension extends \Twig_Extension
     {
 	return array(
             'image' => new \Twig_Function_Method($this, 'image', array('is_safe' => array('html'))),
-            'nl2br' => \Twig_Function_Method($this, 'nl2br', array('is_safe' => array('html')))
+            'nl2br' => new \Twig_Function_Method($this, 'nl2br', array('is_safe' => array('html'))),
 	);
     }
 
