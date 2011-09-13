@@ -76,7 +76,6 @@ abstract class AbstractSecurity
 	    
 	    if ($app['session']->has('redirect_after_login')) {
 		$redirect = $app['session']->get('redirect_after_login');
-		$app['session']->remove('redirect_after_login');
 	    } else {
 		$redirect = $options['redirect'];
 	    }
