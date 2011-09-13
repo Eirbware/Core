@@ -53,7 +53,8 @@ abstract class AbstractSecurity
 	    if ($app['request']->getPathInfo() == $options['login_check_url']) {
 		return;
 	    }
-            if ($options['force_auth'] && !$app['user']) {
+	    if ($options['force_auth'] && !$app['user']) {
+		$app['session']->set('redirect_after_login', $app['request']->getUri());
                 return $app->redirect($options['login_url']);
             }
         });
@@ -75,8 +76,14 @@ abstract class AbstractSecurity
             }
 
             $self->setUser($user);
-
-            return $app->redirect($options['redirect']);
+	    
+	    if ($app['session']->has('redirect_after_login')) {
+		$redirect = $app['session']->get('redirect_after_login');
+		$app['session']->remove('redirect_after_login');
+	    } else {
+		$redirect = $options['redirect'];
+	    }
+            return $app->redirect($redirect);
         });
 
         // Déconnexion
