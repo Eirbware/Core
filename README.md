@@ -114,6 +114,10 @@ clonez ce dépôt et tappez :
 
 Pour télécharger les bibliothèques des dépendances, et vous pourrez commencer à travailler !
 
+N'oubliez pas de charger la base de données si vous avez besoin des utilisateurs dans vos tests :
+
+    mysql -u eirbware -p eirbware < fixture/database.sql
+
 License
 -------
 

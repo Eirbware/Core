@@ -8,8 +8,6 @@ use Silex\Extension\SessionExtension;
 use Silex\Extension\TwigExtension;
 use Silex\Extension\DoctrineExtension;
 
-use Eirbware\Twig\ImageExtension;
-
 /**
  * Classe de base pour les applications web de Eirbware
  *
@@ -74,11 +72,7 @@ class Application extends BaseApplication
 
         // Gestionnaire d'utilisateurs
 	$app['users'] = $app->share(function() use ($app) {
-	    if (isset($app['dbs'])) {
-		return new UsersManager($app['dbs']['eirbware']);
-	    } else {
-		return null;
-	    }
+	    return new UsersManager($app);
         });
 
         // Session 
@@ -95,7 +89,7 @@ class Application extends BaseApplication
         $oldConfigure = isset($app['twig.configure']) ? $app['twig.configure']: function(){};
 	$app['twig.configure'] = $app->protect(function($twig) use ($oldConfigure, $app) {
 	    $oldConfigure($twig);
-	    $twig->addExtension(new ImageExtension);
+	    $twig->addExtension(new Twig\Extension);
 	});
     }
 

@@ -4,8 +4,6 @@ namespace Eirbware\Security;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Eirbware\User;
-
 /**
  * Gestion de la sécurité de l'application
  *
@@ -60,10 +58,9 @@ abstract class AbstractSecurity
         });
 
         // Connexion
-	$app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
-	    $user_class = $app['user.class'];
+        $app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
 
-	    $user = new $user_class($self->authenticate($options, $request), $app);
+            $user = $app['users']->create($self->authenticate($options, $request));
 
             if (($callback = $options['callback']) !== null) {
                 $return = $callback($user);
