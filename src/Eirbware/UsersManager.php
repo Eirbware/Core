@@ -56,7 +56,7 @@ class UsersManager
      */
     public function getAll(array $conditions = array(), $order = null)
     {
-        $sql = 'SELECT logins.* FROM eleves.logins INNER JOIN filieres ON filieres.id = logins.filiere_id';
+        $sql = 'SELECT logins.* FROM eleves.logins INNER JOIN eleves.filieres ON filieres.id = logins.filiere_id';
         $params = array();
 
         if (count($conditions)) {
