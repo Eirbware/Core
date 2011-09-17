@@ -73,13 +73,9 @@ abstract class AbstractSecurity
             }
 
             $self->setUser($user);
-	    
-	    if ($app['session']->has('redirect_after_login') && $app['session']->get('redirect_after_login')) {
-		$redirect = $app['session']->get('redirect_after_login');
-	    } else {
-		$redirect = $options['redirect'];
-	    }
-            return $app->redirect($redirect);
+
+	    return $app->redirect($self->getRedirectUrl() ?: $options['redirect']);
+
         });
 
         // Déconnexion
@@ -117,6 +113,26 @@ abstract class AbstractSecurity
     public function setUser($user)
     {
         $this->app['session']->set($this->app['security.session_key'], $user);
+    }
+
+    /**
+     * Définir l'URL de redirection après le login
+     */
+    public function setRedirectUrl($url)
+    {
+	$this->app['session']->set($this->app['security.redirect_key'], $url);
+    }
+
+    /**
+     * Obtenir l'URL de redirection après le login
+     */
+    public function getRedirectUrl()
+    {
+	$key = $this->app['security.redirect_key'];
+	if ($this->app['session']->has($key)) {
+	    return $this->app['session']->get($key);
+	}
+	return null;
     }
 
     /**

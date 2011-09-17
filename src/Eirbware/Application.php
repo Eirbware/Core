@@ -25,7 +25,8 @@ class Application extends BaseApplication
         'cas.context' => 'cas',
 
         // Paramètres de sécurité
-        'security.session_key' => 'user',
+	'security.session_key' => 'user',
+	'security.redirect_key' => 'redirect_after_login',
 
         // Paramètres pour la base de données de Eirbware 
         // (accès en lecture seule pour les utilisateurs)
