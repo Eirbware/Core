@@ -22,7 +22,7 @@ class UsersManager
     public function __construct($app)
     {
         $this->app = $app;
-        $this->db = $app['dbs']['eirbware'];
+        $this->db = $app['db'];
     }
 
     /**
@@ -36,8 +36,8 @@ class UsersManager
     {
         $query = $this->db->prepare('SELECT logins.id as eid, logins.prenom, logins.nom, logins.annee,
             filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id
-            FROM logins 
-            INNER JOIN filieres ON logins.filiere_id = filieres.id 
+            FROM eleves.logins 
+            INNER JOIN eleves.filieres ON logins.filiere_id = filieres.id 
             WHERE login = ?');
         $query->bindValue(1, $login);
 
@@ -56,7 +56,7 @@ class UsersManager
      */
     public function getAll(array $conditions = array(), $order = null)
     {
-        $sql = 'SELECT logins.* FROM logins INNER JOIN filieres ON filieres.id = logins.filiere_id';
+        $sql = 'SELECT logins.* FROM eleves.logins INNER JOIN filieres ON filieres.id = logins.filiere_id';
         $params = array();
 
         if (count($conditions)) {
@@ -95,7 +95,7 @@ class UsersManager
      */
     public function getFilieres()
     {
-        return $this->db->fetchAll('SELECT * FROM filieres');
+        return $this->db->fetchAll('SELECT * FROM eleves.filieres');
     }
 
     /**
@@ -107,6 +107,6 @@ class UsersManager
      */
     public function getFiliere($syllabus)
     {
-        return $this->db->fetchAssoc('SELECT * FROM filieres WHERE id_syllabus = ?', array($syllabus));
+        return $this->db->fetchAssoc('SELECT * FROM eleves.filieres WHERE id_syllabus = ?', array($syllabus));
     }
 }

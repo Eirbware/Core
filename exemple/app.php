@@ -5,9 +5,10 @@ $app = new Eirbware\Application();
 $app['debug'] = true;
 
 $app['security']->secure(array(
-    'force_auth' => true,
+    'force_auth' => false,
     'redirect' => '../app.php',
 ));
+
 $app->connectDb();
 
 /**

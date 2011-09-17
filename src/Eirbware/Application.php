@@ -30,7 +30,7 @@ class Application extends BaseApplication
         // Paramètres pour la base de données de Eirbware 
         // (accès en lecture seule pour les utilisateurs)
         'eirbware_db.host' => 'localhost',
-        'eirbware_db.dbname' => 'eirbware',
+        'eirbware_db.dbname' => 'eleves',
         'eirbware_db.user' => 'eirbware',
         'eirbware_db.password' => 'eirbware',
 
@@ -103,37 +103,35 @@ class Application extends BaseApplication
      */
     public function connectDb($host = null, $dbname = null, $username = null, $password = null)
     {
-        $dbs = array ();
+	$options = array();
 
         if (null !== $host) {
-            $dbs['default'] = array(
+            $options = array(
                 'driver'    => 'pdo_mysql',
                 'host'      => $host,
                 'dbname'    => $dbname,
                 'user'      => $username,
                 'password'  => $password,
             );
-        }
-
-        $dbs['eirbware'] = array(
-            'driver'    => 'pdo_mysql',
-            'host'      => $this['eirbware_db.host'],
-            'dbname'    => $this['eirbware_db.dbname'],
-            'user'      => $this['eirbware_db.user'],
-            'password'  => $this['eirbware_db.password'],
-        );
+	} else {
+            $options = array(
+                'driver'    => 'pdo_mysql',
+                'host'      => $this['eirbware_db.host'],
+                'dbname'    => $this['eirbware_db.dbname'],
+                'user'      => $this['eirbware_db.user'],
+                'password'  => $this['eirbware_db.password'],
+	    );
+	}
 
         $this->register(new DoctrineExtension(), array(
-            'dbs.options' => $dbs,
+	    'dbs.options' => array(
+		'connection' => $options
+	    ),
             'db.dbal.class_path'    => __DIR__.'/../../vendor/silex/vendor/doctrine-dbal/lib',
             'db.common.class_path'  => __DIR__.'/../../vendor/silex/vendor/doctrine-common/lib',
 	));
 
-	$this['dbs']['eirbware']->query('SET CHARACTER SET UTF8');
-
-	if (null !== $host) {
-	    $this['db']->query('SET CHARACTER SET UTF8');
-	}
+	$this['db']->query('SET CHARACTER SET UTF8');
     }
 
     /**
