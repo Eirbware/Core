@@ -52,7 +52,7 @@ abstract class AbstractSecurity
         // Lorsque l'authentification est forcé, redirection vers l'identification
 	$app->before(function(Request $request) use ($app, $options) {
 	    $path = $app['request']->getPathInfo();
-	    if ($path == $options['login_check_url']) {
+	    if ($path == $options['login_check_url'] || $path == $options['login_url']) {
 		return;
 	    }
 	    $matched = false;
