@@ -20,7 +20,10 @@ abstract class AbstractSecurity
         'login_url' => '/login',
         'logout_url' => '/logout',
         'redirect' => '/',
-        'callback' => null
+	'callback' => null,
+	'patterns' => array(
+	    '^/'
+	),
     );
 
     /**
@@ -47,11 +50,19 @@ abstract class AbstractSecurity
         $self->initialize($options);
 
         // Lorsque l'authentification est forcé, redirection vers l'identification
-	$app->before(function(Request $request) use ($app, $options) { 
-	    if ($app['request']->getPathInfo() == $options['login_check_url']) {
+	$app->before(function(Request $request) use ($app, $options) {
+	    $path = $app['request']->getPathInfo();
+	    if ($path == $options['login_check_url']) {
 		return;
 	    }
-	    if ($options['force_auth'] && !$app['user']) {
+	    $matched = false;
+	    foreach ($options['patterns'] as $pattern) {
+		if (preg_match('#'.$pattern.'#', $path)) {
+		    $matched = true;
+		    break;
+		}
+	    }
+	    if ($matched && $options['force_auth'] && !$app['user']) {
 		$app['session']->set('redirect_after_login', $app['request']->getUri());
                 return $app->redirect($options['login_url']);
             }

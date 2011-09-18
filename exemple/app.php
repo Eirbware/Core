@@ -5,7 +5,10 @@ $app = new Eirbware\Application();
 $app['debug'] = true;
 
 $app['security']->secure(array(
-    'force_auth' => false,
+    'force_auth' => true,
+    'patterns' => array(
+	'^/form'
+    ),
     'redirect' => '../app.php',
 ));
 
