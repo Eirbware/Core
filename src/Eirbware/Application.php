@@ -7,6 +7,7 @@ use Silex\Application as BaseApplication;
 use Silex\Extension\SessionExtension;
 use Silex\Extension\TwigExtension;
 use Silex\Extension\DoctrineExtension;
+use Silex\Extension\UrlGeneratorExtension;
 
 /**
  * Classe de base pour les applications web de Eirbware
@@ -90,8 +91,11 @@ class Application extends BaseApplication
         $oldConfigure = isset($app['twig.configure']) ? $app['twig.configure']: function(){};
 	$app['twig.configure'] = $app->protect(function($twig) use ($oldConfigure, $app) {
 	    $oldConfigure($twig);
-	    $twig->addExtension(new Twig\Extension);
+	    $twig->addExtension(new Twig\Extension($app));
 	});
+
+	// Générateur d'URLs
+	$app->register(new UrlGeneratorExtension());
     }
 
     /**
