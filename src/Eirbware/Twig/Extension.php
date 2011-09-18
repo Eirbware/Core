@@ -37,7 +37,7 @@ class Extension extends \Twig_Extension
 
     public function path($name, array $parameters = array())
     {
-	return $app['url_generator']->generate($name, $parameters);
+	return $this->app['url_generator']->generate($name, $parameters);
     }
 
     public function getName()

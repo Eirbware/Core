@@ -7,7 +7,7 @@
         {% block body %}
         <h1>Bienvenue !</h1>
         {% if user %}
-            Bonjour {{ user.login }} ! <a href="app.php/logout">Déconnexion</a>
+            Bonjour {{ user.login }} ! <a href="{{ path('logout') }}">Déconnexion</a>
 	    <hr />
 	    {% if user.exists %}
 		L'utilisateur {{ user.login}} s'apelle {{ user.prenom }} {{ user.nom }}, est en {{ user.filiereNom }}, {{ user.annee }}° année
@@ -15,7 +15,7 @@
 		L'utilisateur {{ user.login }} n'existe pas en base
 	    {% endif %}
         {% else %}
-            Vous êtes inconnus, <a href="app.php/login">identifiez-vous</a> 
+            Vous êtes inconnus, <a href="{{ path('login') }}">identifiez-vous</a> 
         {% endif %}
         {% endblock %}
     </body>

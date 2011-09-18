@@ -64,11 +64,11 @@ abstract class AbstractSecurity
 	    }
 	    if ($matched && $options['force_auth'] && !$app['user']) {
 		$app['session']->set('redirect_after_login', $app['request']->getUri());
-                return $app->redirect($options['login_url']);
+                return $app->redirect($app['url_generator']->generate('login'));
             }
-        });
+	});
 
-        // Connexion
+        // Vérification des identifiants
         $app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
 
             $user = $app['users']->create($self->authenticate($options, $request));
@@ -87,13 +87,13 @@ abstract class AbstractSecurity
 
 	    return $app->redirect($self->getRedirectUrl() ?: $options['redirect']);
 
-        });
+        })->bind('login_check');
 
         // Déconnexion
         $app->get($options['logout_url'], function() use ($app, $options, $self) {
             $self->logout();
             return $app->redirect($options['redirect']);
-        });
+        })->bind('logout');
     }
 
     /**
