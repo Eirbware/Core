@@ -34,46 +34,31 @@ class UsersManager
      */
     public function getByLogin($login)
     {
-        $query = $this->db->prepare('SELECT logins.id as eid, logins.prenom, logins.nom, logins.annee,
+	return $this->db->fetchAssoc('SELECT logins.id as eid, logins.prenom, logins.nom, logins.annee,
             filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id
             FROM eleves.logins 
             INNER JOIN eleves.filieres ON logins.filiere_id = filieres.id 
-            WHERE login = ?');
-        $query->bindValue(1, $login);
-
-        if ($query->execute()) {
-            return $query->fetch(\PDO::FETCH_ASSOC);
-        }
-
-        return null;
+            WHERE login = ?', array($login));
     }
 
     /**
      * Obtenir la liste des élèves, en filtrant éventuellement par filière
      *
-     * @param array $conditions des conditions
-     * @param string $order l'ordre de tri
+     * @param boolean $queryBuilder obtenir un QueryBuilder au lieu du résultat
      */
-    public function getAll(array $conditions = array(), $order = null)
+    public function getAll($queryBuilder = false)
     {
-        $sql = 'SELECT logins.* FROM eleves.logins INNER JOIN eleves.filieres ON filieres.id = logins.filiere_id';
-        $params = array();
+	$query = $this->db->createQueryBuilder()
+	    ->select('eleves.id as eid, eleves.prenom, eleves.nom, eleves.annee, filieres.nom as filiere_nom,
+		filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
+	    ->from('eleves.logins', 'eleves')
+	    ->join('eleves', 'eleves.filieres', 'filieres', 'filieres.id = eleves.filiere_id');
 
-        if (count($conditions)) {
-            $conds = array();
+	if ($queryBuilder) {
+	    return $query;
+	}
 
-            foreach ($conditions as $name => $value) {
-                $conds[] = $name.' = ?';
-                $params[] = $value;
-            }
-            $sql.= ' WHERE '.implode(' AND ', $conds);
-        }
-
-        if (null !== $order) {
-            $sql.= ' ORDER BY '.$order;
-        }
-
-        return $this->db->fetchAll($sql, $params);
+        return $this->db->fetchAll($query);
     }
 
     /**
