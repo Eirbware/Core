@@ -9,11 +9,19 @@ use Gregwar\Image\Image;
  */
 class Extension extends \Twig_Extension
 {
+    private $app;
+
+    public function __construct($app)
+    {
+	$this->app = $app;
+    }
+
     public function getFunctions()
     {
 	return array(
             'image' => new \Twig_Function_Method($this, 'image', array('is_safe' => array('html'))),
             'nl2br' => new \Twig_Function_Method($this, 'nl2br', array('is_safe' => array('html'))),
+            'path' => new \Twig_Function_Method($this, 'path', array('is_safe' => array('html'))),
 	);
     }
 
@@ -27,8 +35,13 @@ class Extension extends \Twig_Extension
         return nl2br($str);
     }
 
+    public function path($name, array $parameters = array())
+    {
+	return $this->app['url_generator']->generate($name, $parameters);
+    }
+
     public function getName()
     {
-	return 'image';
+	return 'eirbware_extension';
     }
 }

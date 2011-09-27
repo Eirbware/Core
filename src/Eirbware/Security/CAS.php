@@ -27,7 +27,12 @@ class CAS extends AbstractSecurity
         );
         phpCAS::setNoCasServerValidation();
 
-        $options['login_check_url'] = $options['login_url'];
+	$app = $this->app;
+
+	// Connexion
+	$app->get($options['login_url'], function() use ($app) {
+	    return $app->redirect($app['url_generator']->generate('login_check'));
+	})->bind('login');
     }
 
     /**

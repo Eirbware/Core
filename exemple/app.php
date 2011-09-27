@@ -6,8 +6,12 @@ $app['debug'] = true;
 
 $app['security']->secure(array(
     'force_auth' => true,
+    'patterns' => array(
+	'^/form'
+    ),
     'redirect' => '../app.php',
 ));
+
 $app->connectDb();
 
 /**
