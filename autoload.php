@@ -6,7 +6,6 @@ $loader = new Eirbware\ClassLoader();
 
 $loader->registerNamespaces(array(
     'Eirbware'          => __DIR__.'/src',
-    'Gregwar\\DSD'      => __DIR__.'/src/Gregwar/lib',
     'Gregwar'           => __DIR__.'/src',
     'Jasig'             => __DIR__.'/src',
 ));
