@@ -36,8 +36,8 @@ class UsersManager
     {
 	return $this->db->fetchAssoc('SELECT logins.id as eid, logins.prenom, logins.nom, logins.annee,
             filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id
-            FROM eleves.logins 
-            INNER JOIN eleves.filieres ON logins.filiere_id = filieres.id 
+            FROM core.logins 
+            INNER JOIN core.filieres ON logins.filiere_id = filieres.id 
             WHERE login = ?', array($login));
     }
 
@@ -49,11 +49,11 @@ class UsersManager
     public function getAll($queryBuilder = false)
     {
 	$query = $this->db->createQueryBuilder()
-            ->select('eleves.id as eid, eleves.prenom, eleves.nom, eleves.annee,
+            ->select('eleves.id as eid, core.prenom, core.nom, eleves.annee,
                 filieres.nom as filiere_nom, eleves.login,
 		filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
-	    ->from('eleves.logins', 'eleves')
-	    ->join('eleves', 'eleves.filieres', 'filieres', 'filieres.id = eleves.filiere_id');
+	    ->from('core.logins', 'eleves')
+	    ->join('core', 'eleves.filieres', 'filieres', 'filieres.id = eleves.filiere_id');
 
 	if ($queryBuilder) {
 	    return $query;
@@ -81,7 +81,7 @@ class UsersManager
      */
     public function getFilieres()
     {
-        return $this->db->fetchAll('SELECT * FROM eleves.filieres');
+        return $this->db->fetchAll('SELECT * FROM core.filieres');
     }
 
     /**
@@ -93,6 +93,6 @@ class UsersManager
      */
     public function getFiliere($syllabus)
     {
-        return $this->db->fetchAssoc('SELECT * FROM eleves.filieres WHERE id_syllabus = ?', array($syllabus));
+        return $this->db->fetchAssoc('SELECT * FROM core.filieres WHERE id_syllabus = ?', array($syllabus));
     }
 }

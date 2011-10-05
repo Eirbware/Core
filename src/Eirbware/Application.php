@@ -33,7 +33,7 @@ class Application extends BaseApplication
         // Paramètres pour la base de données de Eirbware 
         // (accès en lecture seule pour les utilisateurs)
         'eirbware_db.host' => 'localhost',
-        'eirbware_db.dbname' => 'eleves',
+        'eirbware_db.dbname' => 'core',
         'eirbware_db.user' => 'eirbware',
         'eirbware_db.password' => 'eirbware',
 
