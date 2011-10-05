@@ -28,6 +28,7 @@ class Application extends BaseApplication
         // Paramètres de sécurité
 	'security.session_key' => 'user',
 	'security.redirect_key' => 'redirect_after_login',
+	'security.provider' => '\Eirbware\Security\CAS',
 
         // Paramètres pour la base de données de Eirbware 
         // (accès en lecture seule pour les utilisateurs)
@@ -57,9 +58,10 @@ class Application extends BaseApplication
             $this[$key] = $value;
         }
 
-        // Sécurité CAS
-        $this['security'] = $this->share(function() use ($app) {
-            return new Security\CAS($app);
+        // Sécurité 
+	$this['security'] = $this->share(function() use ($app) {
+	    $providerClass = $app['security.provider'];
+            return new $providerClass($app);
         });
 
         // Obtenir l'utilisateur courant, stocké dans la session
