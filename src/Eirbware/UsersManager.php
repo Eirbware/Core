@@ -53,7 +53,7 @@ class UsersManager
                 filieres.nom as filiere_nom, logins.login,
 		filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
 	    ->from('core.logins', 'logins')
-	    ->join('logins', 'logins.filieres', 'filieres', 'filieres.id = logins.filiere_id');
+	    ->join('logins', 'core.filieres', 'filieres', 'filieres.id = logins.filiere_id');
 
 	if ($queryBuilder) {
 	    return $query;
