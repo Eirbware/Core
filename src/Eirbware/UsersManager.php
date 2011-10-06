@@ -113,11 +113,21 @@ class UsersManager
     /**
      * Obtenir la liste des filières
      *
+     * @param boolean $onlyReals n'inclure que les "vraies" filières
+     *
      * @return array la liste des filières
      */
-    public function getFilieres()
+    public function getFilieres($onlyReals = true)
     {
-        return $this->db->fetchAll('SELECT * FROM core.filieres');
+        $query = $this->db->createQueryBuilder
+            ->select('filieres.*')
+            ->from('core.filieres', 'filieres');
+
+        if (!$onlyReals) {
+            $query->where('filieres.real = 1');
+        }
+
+        return $this->db->fetchAll($query);
     }
 
     /**
