@@ -26,9 +26,9 @@ class Application extends BaseApplication
         'cas.context' => 'cas',
 
         // Paramètres de sécurité
-	'security.session_key' => 'user',
-	'security.redirect_key' => 'redirect_after_login',
-	'security.provider' => '\Eirbware\Security\CAS',
+        'security.session_key' => 'user',
+        'security.redirect_key' => 'redirect_after_login',
+        'security.provider' => '\Eirbware\Security\CAS',
 
         // Paramètres pour la base de données de Eirbware 
         // (accès en lecture seule pour les utilisateurs)
@@ -38,10 +38,10 @@ class Application extends BaseApplication
         'eirbware_db.password' => 'eirbware',
 
         // Répértoire des vues
-	'templates.dir' => 'views',
+        'templates.dir' => 'views',
 
-	// Classe à utiliser pour les utilisateurs
-	'user.class' => '\Eirbware\User',
+        // Classe à utiliser pour les utilisateurs
+        'user.class' => '\Eirbware\User',
     );
 
     /**
@@ -59,24 +59,24 @@ class Application extends BaseApplication
         }
 
         // Sécurité 
-	$this['security'] = $this->share(function() use ($app) {
-	    $providerClass = $app['security.provider'];
+        $this['security'] = $this->share(function() use ($app) {
+            $providerClass = $app['security.provider'];
             return new $providerClass($app);
         });
 
         // Obtenir l'utilisateur courant, stocké dans la session
         $app['user'] = $app->share(function() use ($app) {
-	    $user = $app['security']->getUser();
-	    if (is_object($user)) {
-		$user->setApp($app);
-	    }
+            $user = $app['security']->getUser();
+            if (is_object($user)) {
+                $user->setApp($app);
+            }
 
-	    return $user;
+            return $user;
         });
 
         // Gestionnaire d'utilisateurs
-	$app['users'] = $app->share(function() use ($app) {
-	    return new UsersManager($app);
+        $app['users'] = $app->share(function() use ($app) {
+            return new UsersManager($app);
         });
 
         // Session 
@@ -86,18 +86,18 @@ class Application extends BaseApplication
         // Extension Twig
         $this->register(new TwigExtension(), array(
             'twig.path'       => $this['templates.dir'],
-	    'twig.class_path' => __DIR__.'/../../vendor/silex/vendor/twig/lib',
-	));
+            'twig.class_path' => __DIR__.'/../../vendor/silex/vendor/twig/lib',
+        ));
 
-	// Ajout de l'extension Image
+        // Ajout de l'extension Image
         $oldConfigure = isset($app['twig.configure']) ? $app['twig.configure']: function(){};
-	$app['twig.configure'] = $app->protect(function($twig) use ($oldConfigure, $app) {
-	    $oldConfigure($twig);
-	    $twig->addExtension(new Twig\Extension($app));
-	});
+        $app['twig.configure'] = $app->protect(function($twig) use ($oldConfigure, $app) {
+            $oldConfigure($twig);
+            $twig->addExtension(new Twig\Extension($app));
+        });
 
-	// Générateur d'URLs
-	$app->register(new UrlGeneratorExtension());
+        // Générateur d'URLs
+        $app->register(new UrlGeneratorExtension());
     }
 
     /**
@@ -110,7 +110,7 @@ class Application extends BaseApplication
      */
     public function connectDb($host = null, $dbname = null, $username = null, $password = null)
     {
-	$options = array();
+        $options = array();
 
         if (null !== $host) {
             $options = array(
@@ -120,25 +120,25 @@ class Application extends BaseApplication
                 'user'      => $username,
                 'password'  => $password,
             );
-	} else {
+        } else {
             $options = array(
                 'driver'    => 'pdo_mysql',
                 'host'      => $this['eirbware_db.host'],
                 'dbname'    => $this['eirbware_db.dbname'],
                 'user'      => $this['eirbware_db.user'],
                 'password'  => $this['eirbware_db.password'],
-	    );
-	}
+            );
+        }
 
         $this->register(new DoctrineExtension(), array(
-	    'dbs.options' => array(
-		'connection' => $options
-	    ),
+            'dbs.options' => array(
+                'connection' => $options
+            ),
             'db.dbal.class_path'    => __DIR__.'/../../vendor/silex/vendor/doctrine-dbal/lib',
             'db.common.class_path'  => __DIR__.'/../../vendor/silex/vendor/doctrine-common/lib',
-	));
+        ));
 
-	$this['db']->query('SET CHARACTER SET UTF8');
+        $this['db']->query('SET CHARACTER SET UTF8');
     }
 
     /**
