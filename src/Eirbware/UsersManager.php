@@ -83,7 +83,7 @@ class UsersManager
     public function getAll($queryBuilder = false)
     {
         $query = $this->db->createQueryBuilder()
-            ->select($selects = 'logins.id as eid, core.prenom, core.nom, logins.annee,
+            ->select($selects = 'logins.id as eid, logins.prenom, logins.nom, logins.annee,
                 filieres.nom as filiere_nom, logins.login,
                 filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
                 ->from('core.logins', 'logins')
