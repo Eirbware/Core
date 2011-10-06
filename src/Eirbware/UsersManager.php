@@ -119,11 +119,11 @@ class UsersManager
      */
     public function getFilieres($onlyReals = true)
     {
-        $query = $this->db->createQueryBuilder
+        $query = $this->db->createQueryBuilder()
             ->select('filieres.*')
             ->from('core.filieres', 'filieres');
 
-        if (!$onlyReals) {
+        if ($onlyReals) {
             $query->where('filieres.real = 1');
         }
 
