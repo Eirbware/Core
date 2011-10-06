@@ -35,15 +35,32 @@ class UsersManager
     public function getByLogin($login)
     {
         $query = $this->db->createQueryBuilder()
-            ->select('logins.id as eid, logins.prenom, logins.nom, logins.annee,
+            ->select($selects = 'logins.id as eid, logins.prenom, logins.nom, logins.annee,
                 filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
                 ->from('core.logins', 'logins')
-                ->join('logins', 'core.filieres', 'filieres', 'logins.filiere_id = filieres.id')
-                ->where('logins.login = ?')
-                ->getSQL()
-                ;
+                ->join('logins', 'core.filieres', 'filieres', 'logins.filiere_id = filieres.id');
+
+        $this->addExtension($query, $selects);
+
+        $query->where('logins.login = ?')
+            ->getSQL()
+            ;
 
         return $this->db->fetchAssoc($query, array($login));
+    }
+
+    /**
+     * Ajout l'utilisateur extension à la requête
+     *
+     * @param QueryBuilder $queryBuilder le queryBuilder
+     * @param string $selects les élément séléctionnés
+     */
+    public function addExtension($queryBuilder, $selects = '')
+    {
+        if (null !== $this->app['user.extension']) {
+            $query->leftJoin('logins', $this->app['user.extension'], 'user_extension', 'user_extension.eid = logins.id')
+                ->select($selects.', user_extension.*');
+        }
     }
 
     /**
@@ -53,16 +70,18 @@ class UsersManager
      */
     public function getAll($queryBuilder = false)
     {
-	$query = $this->db->createQueryBuilder()
-            ->select('logins.id as eid, core.prenom, core.nom, logins.annee,
+        $query = $this->db->createQueryBuilder()
+            ->select($selects = 'logins.id as eid, core.prenom, core.nom, logins.annee,
                 filieres.nom as filiere_nom, logins.login,
-		filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
-	    ->from('core.logins', 'logins')
-	    ->join('logins', 'core.filieres', 'filieres', 'filieres.id = logins.filiere_id');
+                filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
+                ->from('core.logins', 'logins')
+                ->join('logins', 'core.filieres', 'filieres', 'filieres.id = logins.filiere_id');
 
-	if ($queryBuilder) {
-	    return $query;
-	}
+        $this->addExtension($query, $selects);
+
+        if ($queryBuilder) {
+            return $query;
+        }
 
         return $this->db->fetchAll($query);
     }

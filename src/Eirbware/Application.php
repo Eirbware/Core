@@ -30,6 +30,9 @@ class Application extends BaseApplication
         'security.redirect_key' => 'redirect_after_login',
         'security.provider' => '\Eirbware\Security\CAS',
 
+        // Table d'extention utilisateur
+        'user.extension' => null,
+
         // Paramètres pour la base de données de Eirbware 
         // (accès en lecture seule pour les utilisateurs)
         'eirbware_db.host' => 'localhost',
