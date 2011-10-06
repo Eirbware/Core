@@ -59,7 +59,7 @@ class UsersManager
     {
         if (null !== $this->app['user.extension']) {
             $queryBuilder->leftJoin('logins', $this->app['user.extension'], 'user_extension', 'user_extension.eid = logins.id')
-                ->select($selects.', user_extension.*');
+                ->select('user_extension.*, '.$selects);
         }
     }
 
