@@ -49,9 +49,13 @@ class UsersManager
         $datas = $this->db->fetchAssoc($query, array($login));
 
         if ($datas && null === $datas['id'] && $this->app['user.default_datas']) {
-            $this->db->insert($this->app['user.extension'], array_merge(array(
+            $newDatas = array_merge(array(
                 'eid' => $datas['eid']
-            ), $this->app['user.default_datas']));
+            ), $this->app['user.default_datas']);
+
+            $this->db->insert($this->app['user.extension'], $newDatas);
+
+            $datas = array_replace($datas, $newDatas);
         }
 
         return $datas;
