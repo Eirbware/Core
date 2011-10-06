@@ -58,7 +58,7 @@ class UsersManager
     public function addExtension($queryBuilder, $selects = '')
     {
         if (null !== $this->app['user.extension']) {
-            $query->leftJoin('logins', $this->app['user.extension'], 'user_extension', 'user_extension.eid = logins.id')
+            $queryBuilder->leftJoin('logins', $this->app['user.extension'], 'user_extension', 'user_extension.eid = logins.id')
                 ->select($selects.', user_extension.*');
         }
     }
