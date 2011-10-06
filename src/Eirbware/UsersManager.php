@@ -49,11 +49,11 @@ class UsersManager
     public function getAll($queryBuilder = false)
     {
 	$query = $this->db->createQueryBuilder()
-            ->select('eleves.id as eid, core.prenom, core.nom, eleves.annee,
-                filieres.nom as filiere_nom, eleves.login,
+            ->select('logins.id as eid, core.prenom, core.nom, logins.annee,
+                filieres.nom as filiere_nom, logins.login,
 		filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
-	    ->from('core.logins', 'eleves')
-	    ->join('core', 'eleves.filieres', 'filieres', 'filieres.id = eleves.filiere_id');
+	    ->from('core.logins', 'logins')
+	    ->join('logins', 'logins.filieres', 'filieres', 'filieres.id = logins.filiere_id');
 
 	if ($queryBuilder) {
 	    return $query;
