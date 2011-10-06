@@ -46,7 +46,15 @@ class UsersManager
             ->getSQL()
             ;
 
-        return $this->db->fetchAssoc($query, array($login));
+        $datas = $this->db->fetchAssoc($query, array($login));
+
+        if ($datas && null === $datas['id'] && $this->app['user.default_datas']) {
+            $this->db->insert($this->app['user.extension'], array_merge(array(
+                'eid' => $datas['eid']
+            ), $this->app['user.default_datas']));
+        }
+
+        return $datas;
     }
 
     /**

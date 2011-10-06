@@ -31,8 +31,8 @@ class User
 
     public function __construct($login, $app = null)
     {
-	$this->login = $login;
-	$this->app = $app;
+        $this->login = $login;
+        $this->app = $app;
     }
 
     /**
@@ -40,7 +40,7 @@ class User
      */
     public function setApp($app)
     {
-	$this->app = $app;
+        $this->app = $app;
     }
 
     /**
@@ -48,7 +48,7 @@ class User
      */
     public function getLogin()
     {
-	return $this->login;
+        return $this->login;
     }
 
     /**
@@ -56,19 +56,19 @@ class User
      */
     public function __call($method, $args)
     {
-	$property = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $method));
-	return $this->__get($property);
+        return $this->__get($property);
     }
 
     public function __get($property)
     {
-	$this->load();
+        $property = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $method));
+        $this->load();
 
-	if (isset($this->datas[$property])) {
-	    return $this->datas[$property];
-	} else { 
-	    return null;
-	}
+        if (isset($this->datas[$property])) {
+            return $this->datas[$property];
+        } else { 
+            return null;
+        }
     }
 
     /**
@@ -76,11 +76,11 @@ class User
      */
     public function load()
     {
-	if (!$this->loaded && $this->app) {
-	    $this->doLoad();
-	    $this->loaded = true;
-	}
-	return (bool)($this->datas);
+        if (!$this->loaded && $this->app) {
+            $this->doLoad();
+            $this->loaded = true;
+        }
+        return (bool)($this->datas);
     }
 
     /**
@@ -88,7 +88,7 @@ class User
      */
     public function doLoad()
     {
-	$this->datas = $this->app['users']->getByLogin($this->getLogin()); 
+        $this->datas = $this->app['users']->getByLogin($this->getLogin()); 
     }
 
     /**
@@ -96,7 +96,7 @@ class User
      */
     public function reload()
     {
-	$this->doLoad();
+        $this->doLoad();
     }
 
     /**
@@ -104,7 +104,7 @@ class User
      */
     public function exists()
     {
-	return $this->load();
+        return $this->load();
     }
 
     /**
@@ -120,6 +120,6 @@ class User
      */
     public function __sleep()
     {
-	return array('login');
+        return array('login');
     }
 }
