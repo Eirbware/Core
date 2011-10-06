@@ -34,11 +34,16 @@ class UsersManager
      */
     public function getByLogin($login)
     {
-	return $this->db->fetchAssoc('SELECT logins.id as eid, logins.prenom, logins.nom, logins.annee,
-            filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id
-            FROM core.logins 
-            INNER JOIN core.filieres ON logins.filiere_id = filieres.id 
-            WHERE login = ?', array($login));
+        $query = $this->db->createQueryBuilder()
+            ->select('logins.id as eid, logins.prenom, logins.nom, logins.annee,
+                filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
+                ->from('core.logins', 'logins')
+                ->join('logins', 'core.filieres', 'filieres', 'logins.filiere_id = filieres.id')
+                ->where('logins.login = ?')
+                ->getSQL()
+                ;
+
+        return $this->db->fetchAssoc($query, array($login));
     }
 
     /**
