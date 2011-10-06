@@ -61,7 +61,6 @@ class User
 
     public function __get($property)
     {
-        $property = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $method));
         $this->load();
 
         if (isset($this->datas[$property])) {
