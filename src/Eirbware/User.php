@@ -56,7 +56,7 @@ class User
      */
     public function __call($method, $args)
     {
-        return $this->__get($property);
+        return $this->__get($method);
     }
 
     public function __get($property)
