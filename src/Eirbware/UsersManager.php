@@ -48,7 +48,7 @@ class UsersManager
 
         $datas = $this->db->fetchAssoc($query, array($login));
 
-        if ($datas && null === $datas['id'] && $this->app['user.default_datas']) {
+        if ($datas && isset($datas['id']) && null === $datas['id'] && $this->app['user.default_datas']) {
             $newDatas = array_merge(array(
                 'eid' => $datas['eid']
             ), $this->app['user.default_datas']);
