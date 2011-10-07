@@ -34,6 +34,26 @@ class UsersManager
      */
     public function getByLogin($login)
     {
+        return $this->getUser(array('login' => $login));
+    }
+
+    /**
+     * Obtenir un utilisateur par eid
+     *
+     * @param $eid l'eid
+     *
+     * @return array les données correspondantes
+     */
+    public function getByEid($eid)
+    {
+        return $this->getUser(array('id' => $eid));
+    }
+
+    /**
+     * Obtenir un utilisateur sous conditions
+     */
+    public function getUser(array $conditions = array())
+    {
         $query = $this->db->createQueryBuilder()
             ->select($selects = 'logins.id as eid, logins.prenom, logins.nom, logins.annee,
                 filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
@@ -42,11 +62,15 @@ class UsersManager
 
         $this->addExtension($query, $selects);
 
-        $query->where('logins.login = ?')
-            ->getSQL()
-            ;
+        $values = array();
+        foreach ($conditions as $field => $value) {
+            $query->andWhere('logins.'.$field.' = ?')
+                ->getSQL()
+                ;
+            $values[] = $value;
+        }
 
-        $datas = $this->db->fetchAssoc($query, array($login));
+        $datas = $this->db->fetchAssoc($query, $values);
 
         if ($datas && isset($datas['id']) && null === $datas['id'] && $this->app['user.default_datas']) {
             $newDatas = array_merge(array(
