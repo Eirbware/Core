@@ -55,7 +55,7 @@ class UsersManager
     public function getUser(array $conditions = array())
     {
         $query = $this->db->createQueryBuilder()
-            ->select($selects = 'logins.id as eid, logins.prenom, logins.nom, logins.annee,
+            ->select($selects = 'logins.id as eid, logins.prenom, logins.nom, logins.annee, logins.login,
                 filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
                 ->from('core.logins', 'logins')
                 ->join('logins', 'core.filieres', 'filieres', 'logins.filiere_id = filieres.id');
