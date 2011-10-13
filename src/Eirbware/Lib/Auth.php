@@ -1,6 +1,6 @@
 <?php
 
-namespace Eirbware;
+namespace Eirbware\Lib;
 
 /**
  * Classe d'API pour Eirb'auth
