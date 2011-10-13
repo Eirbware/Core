@@ -22,7 +22,7 @@ class EirbAuth extends AbstractSecurity
      */
     public function initialize(array &$options)
     {
-        $this->auth = new Eirbware\Auth($options);
+        $this->auth = new \Eirbware\Lib\Auth($options);
     }
     
     /**
