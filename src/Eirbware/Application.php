@@ -28,7 +28,7 @@ class Application extends BaseApplication
         // Paramètres de sécurité
         'security.session_key' => 'user',
         'security.redirect_key' => 'redirect_after_login',
-        'security.provider' => '\Eirbware\Security\CAS',
+        'security.provider' => '\Eirbware\Security\EirbAuth',
 
         // Table d'extention utilisateur
         'user.extension' => null,
