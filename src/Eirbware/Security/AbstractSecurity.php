@@ -64,7 +64,7 @@ abstract class AbstractSecurity
 	    }
 	    if ($matched && $options['force_auth'] && !$app['user']) {
 		$app['session']->set('redirect_after_login', $app['request']->getUri());
-                return $app->redirect($app['url_generator']->generate('login'));
+                return $app->redirect($app['url_generator']->generate('login_check'));
             }
 	});
 
