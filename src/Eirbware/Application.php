@@ -72,11 +72,13 @@ class Application extends BaseApplication
 
         // Obtenir l'utilisateur courant, stocké dans la session
         $app['user'] = $app->share(function() use ($app) {
+            $app->assertDB();
             return $app['users']->getByLogin($app['security']->getUser());
         });
 
         // Gestionnaire d'utilisateurs
         $app['users'] = $app->share(function() use ($app) {
+            $app->assertDB();
             return new UsersManager($app);
         });
 
@@ -151,5 +153,17 @@ class Application extends BaseApplication
     public function render($template, array $parametres = array())
     {
         return $this['twig']->render($template, $parametres);
+    }
+
+    /**
+     * Assure que la base de donnnée à bien été initialisée : connectDb()
+     * dans le cas contraire : termine le scripte et affiche une erreur
+     */
+    public function assertDB()
+    {
+        if (!isset($this['db'])) {
+            echo 'Base de donnée non initialisée';
+            throw new \ErrorException('Base de donnée non initialisée');
+        }
     }
 }
