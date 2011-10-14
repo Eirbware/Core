@@ -71,7 +71,7 @@ abstract class AbstractSecurity
         // Vérification des identifiants
         $app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
 
-            $user = $app['users']->create($self->authenticate($options, $request));
+            $user = $app['users']->getByLogin($self->authenticate($options, $request));
 
             if (($callback = $options['callback']) !== null) {
                 $return = $callback($user);
@@ -155,6 +155,8 @@ abstract class AbstractSecurity
 
     /**
      * Authentifier l'utilisateur
+     *
+     * Retourne le login de l'utilisateur
      */
     public abstract function authenticate(array &$options, Request $request);
 }

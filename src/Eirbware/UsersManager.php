@@ -65,14 +65,13 @@ class UsersManager
         $values = array();
         foreach ($conditions as $field => $value) {
             $query->andWhere('logins.'.$field.' = ?')
-                ->getSQL()
-                ;
+                ->getSQL();
             $values[] = $value;
         }
 
         $datas = $this->db->fetchAssoc($query, $values);
 
-        if ($datas && isset($datas['id']) && null === $datas['id'] && $this->app['user.default_datas']) {
+        if ($datas && !empty($this->app['user.extension']) && !empty($datas['id']) && !empty($this->app['user.default_datas'])) {
             $newDatas = array_merge(array(
                 'eid' => $datas['eid']
             ), $this->app['user.default_datas']);
@@ -82,7 +81,12 @@ class UsersManager
             $datas = array_replace($datas, $newDatas);
         }
 
-        return $datas;
+        if ($this->app['user.object']) {
+            return $this->create($datas, $this->app);
+        }
+        else {
+            return $datas;
+        }
     }
 
     /**
@@ -119,19 +123,26 @@ class UsersManager
             return $query;
         }
 
-        return $this->db->fetchAll($query);
+        $datas = $this->db->fetchAll($query);
+        
+        if ($this->app['user.object']) {
+            return array_map(array($this, 'create'), $datas);
+        }
+        else {
+            return $datas;
+        }
     }
 
     /**
-     * Créé une instance d'utilisateur
+     * Créer une instance d'utilisateur
      *
-     * @param string $login identifiant
+     * @param array : les attributs de l'objet utilisateur
      */
-    public function create($login)
+    public function create($datas)
     {
         $user_class = $this->app['user.class'];
 
-        return new $user_class($login, $this->app);
+        return new $user_class($datas, $this->app);
     }
 
     /**

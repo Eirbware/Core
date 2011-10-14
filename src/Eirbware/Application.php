@@ -46,6 +46,8 @@ class Application extends BaseApplication
 
         // Classe à utiliser pour les utilisateurs
         'user.class' => '\Eirbware\User',
+        // Active l'utilsation du mappage objet des utilisateurs
+        'user.object' => true,
     );
 
     /**
@@ -71,10 +73,6 @@ class Application extends BaseApplication
         // Obtenir l'utilisateur courant, stocké dans la session
         $app['user'] = $app->share(function() use ($app) {
             $user = $app['security']->getUser();
-            if (is_object($user)) {
-                $user->setApp($app);
-            }
-
             return $user;
         });
 

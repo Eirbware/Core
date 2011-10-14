@@ -6,14 +6,10 @@ namespace Eirbware;
  * Représente un utilisateur
  *
  * @author Grégoire Passault <g.passault@gmail.com>
+ * @author Quentin Rouxel
  */
 class User
 {
-    /**
-     * Identifiant de l'utilisateur
-     */
-    protected $login;
-
     /**
      * Application
      */
@@ -22,25 +18,20 @@ class User
     /**
      * Données provenant de la base de données
      */
-    protected $datas = null;
-
-    /**
-     * L'utilisateur a t-il été chargé depuis la base ?
-     */
-    protected $loaded = false;
-
-    public function __construct($login, $app = null)
+    protected $datas;
+    
+    public function __construct($datas, $app = null)
     {
-        $this->login = $login;
+        $this->datas = $datas;
         $this->app = $app;
     }
-
+    
     /**
-     * Définir l'application
+     * Eid
      */
-    public function setApp($app)
+    public function getEid()
     {
-        $this->app = $app;
+       return $this->eid();
     }
 
     /**
@@ -48,7 +39,7 @@ class User
      */
     public function getLogin()
     {
-        return $this->login;
+        return $this->login();
     }
 
     /**
@@ -61,49 +52,19 @@ class User
 
     public function __get($property)
     {
-        $this->load();
-
-        if (isset($this->datas[$property])) {
+        if ($this->exists() && isset($this->datas[$property])) {
             return $this->datas[$property];
         } else { 
             return null;
         }
     }
-
-    /**
-     * Charger l'utilisateur depuis la base
-     */
-    public function load()
-    {
-        if (!$this->loaded && $this->app) {
-            $this->doLoad();
-            $this->loaded = true;
-        }
-        return (bool)($this->datas);
-    }
-
-    /**
-     * Charger les données
-     */
-    public function doLoad()
-    {
-        $this->datas = $this->app['users']->getByLogin($this->getLogin()); 
-    }
-
-    /**
-     * Recharger les données
-     */
-    public function reload()
-    {
-        $this->doLoad();
-    }
-
+    
     /**
      * Existe t-il ?
      */
     public function exists()
     {
-        return $this->load();
+        return isset($this->datas) && !empty($this->datas['eid']) && !empty($this->datas['login']);
     }
 
     /**
