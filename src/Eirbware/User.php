@@ -64,7 +64,7 @@ class User
      */
     public function exists()
     {
-        return isset($this->datas) && !empty($this->datas['eid']) && !empty($this->datas['login']);
+        return (bool)(isset($this->datas) && !empty($this->datas['eid']) && !empty($this->datas['login']));
     }
 
     /**
@@ -76,10 +76,10 @@ class User
     }
 
     /**
-     * Seul le login est stocké dans la sérialization
+     * Sauvegarde des données dans la sérialization
      */
     public function __sleep()
     {
-        return array('login');
+        return array('datas');
     }
 }

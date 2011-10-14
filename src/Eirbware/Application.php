@@ -72,8 +72,7 @@ class Application extends BaseApplication
 
         // Obtenir l'utilisateur courant, stocké dans la session
         $app['user'] = $app->share(function() use ($app) {
-            $user = $app['security']->getUser();
-            return $user;
+            return $app['users']->getByLogin($app['security']->getUser());
         });
 
         // Gestionnaire d'utilisateurs

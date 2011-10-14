@@ -50,7 +50,7 @@ abstract class AbstractSecurity
         $self->initialize($options);
 
         // Lorsque l'authentification est forcé, redirection vers l'identification
-	$app->before(function(Request $request) use ($app, $options) {
+	$app->before(function(Request $request) use ($app, $options, $self) {
 	    $path = $app['request']->getPathInfo();
 	    if ($path == $options['login_check_url'] || $path == $options['login_url']) {
 		return;
@@ -61,8 +61,11 @@ abstract class AbstractSecurity
 		    $matched = true;
 		    break;
 		}
-	    }
-	    if ($matched && $options['force_auth'] && !$app['user']) {
+            }
+
+            $user = $self->getUser();
+
+            if ($matched && $options['force_auth'] && empty($user)) {
 		$app['session']->set('redirect_after_login', $app['request']->getUri());
                 return $app->redirect($app['url_generator']->generate('login_check'));
             }
@@ -70,8 +73,8 @@ abstract class AbstractSecurity
 
         // Vérification des identifiants
         $app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
-
-            $user = $app['users']->getByLogin($self->authenticate($options, $request));
+        
+            $user = $self->authenticate($options, $request);
 
             if (($callback = $options['callback']) !== null) {
                 $return = $callback($user);
@@ -123,7 +126,9 @@ abstract class AbstractSecurity
      */
     public function setUser($user)
     {
-        $this->app['session']->set($this->app['security.session_key'], $user);
+        if (isset($user)) {
+            $this->app['session']->set($this->app['security.session_key'], $user);
+        }
     }
 
     /**
