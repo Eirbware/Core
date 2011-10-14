@@ -10,6 +10,20 @@ namespace Eirbware;
 class UsersManager
 {
     /**
+     * Champs à selectioner et leur alias de l'utilisateur
+     */
+    protected $userAttributes = array(
+        'logins.id' => 'eid', 
+        'logins.prenom' => null,
+        'logins.nom' => null,
+        'logins.annee' => null,
+        'logins.login' => null,
+        'filieres.nom' => 'filiere_nom',
+        'filieres.id_syllabus' => 'filiere_id_syllabus',
+        'filieres.id' => 'filiere_id',
+    );
+
+    /**
      * Application
      */
     protected $app;
@@ -55,8 +69,7 @@ class UsersManager
     public function getUser(array $conditions = array())
     {
         $query = $this->db->createQueryBuilder()
-            ->select($selects = 'logins.id as eid, logins.prenom, logins.nom, logins.annee, logins.login,
-                filieres.nom as filiere_nom, filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
+            ->select($selects = $this->selectAttributes())
                 ->from('core.logins', 'logins')
                 ->join('logins', 'core.filieres', 'filieres', 'logins.filiere_id = filieres.id');
 
@@ -111,9 +124,7 @@ class UsersManager
     public function getAll($queryBuilder = false)
     {
         $query = $this->db->createQueryBuilder()
-            ->select($selects = 'logins.id as eid, logins.prenom, logins.nom, logins.annee,
-                filieres.nom as filiere_nom, logins.login,
-                filieres.id_syllabus as filiere_id_syllabus, filieres.id as filiere_id')
+            ->select($selects = $this->selectAttributes())
                 ->from('core.logins', 'logins')
                 ->join('logins', 'core.filieres', 'filieres', 'filieres.id = logins.filiere_id');
 
@@ -176,4 +187,25 @@ class UsersManager
     {
         return $this->db->fetchAssoc('SELECT * FROM core.filieres WHERE id_syllabus = ?', array($syllabus));
     }
+
+    /**
+     * Créé la requette SQL de sélection des attributs
+     */
+    private function selectAttributes()
+    {
+        $sql = null;
+        foreach($this->userAttributes as $name => $alias) {
+            if (empty($alias)) {
+                $sql .= $name.', ';
+            }
+            else {
+                $sql .= $name.' as '.$alias.', ';
+            }
+        }
+        if (!empty($sql)) {
+            $sql = substr($sql, 0, -2);
+        }
+        return $sql;
+    }
+
 }
