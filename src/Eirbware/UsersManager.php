@@ -81,10 +81,9 @@ class UsersManager
                 ->getSQL();
             $values[] = $value;
         }
-
         $datas = $this->db->fetchAssoc($query, $values);
 
-        if ($datas && !empty($this->app['user.extension']) && !empty($datas['id']) && !empty($this->app['user.default_datas'])) {
+        if (!empty($datas) && !empty($this->app['user.extension']) && !empty($this->app['user.default_datas']) && empty($datas['id'])) {
             $newDatas = array_merge(array(
                 'eid' => $datas['eid']
             ), $this->app['user.default_datas']);
