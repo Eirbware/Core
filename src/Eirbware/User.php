@@ -45,18 +45,18 @@ class User
     /**
      * Getters
      */
-    public function __call($method, $args)
-    {
-        return $this->__get($method);
-    }
-
-    public function __get($property)
+    public function __call($property, $args)
     {
         if ($this->exists() && isset($this->datas[$property])) {
             return $this->datas[$property];
         } else { 
             return null;
         }
+    }
+
+    public function __get($property)
+    {
+        return $this->$property();
     }
     
     /**
