@@ -94,7 +94,7 @@ class UsersManager
         }
 
         if ($this->app['user.object']) {
-            return $this->create($datas, $this->app);
+            return $this->createUser($datas, $this->app);
         }
         else {
             return $datas;
@@ -136,7 +136,7 @@ class UsersManager
         $datas = $this->db->fetchAll($query);
         
         if ($this->app['user.object']) {
-            return array_map(array($this, 'create'), $datas);
+            return $this->createUsers($datas);
         }
         else {
             return $datas;
@@ -148,11 +148,20 @@ class UsersManager
      *
      * @param array : les attributs de l'objet utilisateur
      */
-    public function create($datas)
+    public function createUser($datas)
     {
         $user_class = $this->app['user.class'];
 
         return new $user_class($datas, $this->app);
+    }
+
+    /**
+     * Transforme un tableau d'utilisateurs sous forme associatif
+     * en tableau d'utilisateurs objet
+     */
+    public function createUsers($datas)
+    {
+        return array_map(array($this, 'createUser'), $datas);
     }
 
     /**
