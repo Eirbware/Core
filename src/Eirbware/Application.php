@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Eirbware;
 
 use Silex\Application as BaseApplication;
@@ -8,6 +9,8 @@ use Silex\Extension\SessionExtension;
 use Silex\Extension\TwigExtension;
 use Silex\Extension\DoctrineExtension;
 use Silex\Extension\UrlGeneratorExtension;
+
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Classe de base pour les applications web de Eirbware
@@ -63,6 +66,9 @@ class Application extends BaseApplication
         foreach ($parameters as $key => $value) {
             $this[$key] = $value;
         }
+
+        // Prise en compte du reverse proxy de l'enseirb-matmeca
+        Request::trustProxyData();
 
         // Sécurité 
         $this['security'] = $this->share(function() use ($app) {
