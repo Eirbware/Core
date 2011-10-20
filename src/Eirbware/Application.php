@@ -77,6 +77,10 @@ class Application extends BaseApplication
         });
 
         // Obtenir l'utilisateur courant, stocké dans la session
+        //
+        // Ne pose pas de problème : le code de Pimple est explicite :
+        // si la closure renvoi null, le prochain appel au wrapper share 
+        // rapellera la closure.
         $app['user'] = $app->share(function() use ($app) {
             $app->assertDB();
             if ($app['security']->getUser()) {
