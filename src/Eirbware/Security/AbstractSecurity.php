@@ -90,6 +90,7 @@ abstract class AbstractSecurity
             }
 
             $eid = $user->eid();
+
             $self->setUserEid($eid);
 
 	    return $app->redirect($self->getRedirectUrl() ?: $options['redirect']);
@@ -130,8 +131,8 @@ abstract class AbstractSecurity
      */
     public function setUserEid($eid)
     {
-        if (isset($user)) {
-            $this->app['session']->set($this->app['security.session_key'], $user);
+        if (isset($eid)) {
+            $this->app['session']->set($this->app['security.session_key'], $eid);
         }
     }
 
