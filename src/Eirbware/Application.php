@@ -83,8 +83,14 @@ class Application extends BaseApplication
         // rapellera la closure.
         $app['user'] = $app->share(function() use ($app) {
             $app->assertDB();
-            if ($app['security']->getUser()) {
-                return $app['users']->getByLogin($app['security']->getUser());
+            if ($app['security']->getUserEid()) {
+                $user = $app['users']->getByEid($app['security']->getUserEid());
+                if ($user->exists()) {
+                    return $user;
+                }
+                else {
+                    return null;
+                }
             } else {
                 return null;
             }

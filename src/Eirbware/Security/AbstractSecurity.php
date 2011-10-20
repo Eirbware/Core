@@ -50,7 +50,8 @@ abstract class AbstractSecurity
         $self->initialize($options);
 
         // Lorsque l'authentification est forcé, redirection vers l'identification
-	$app->before(function(Request $request) use ($app, $options, $self) {
+        $app->before(function(Request $request) use ($app, $options, $self) {
+
 	    $path = $app['request']->getPathInfo();
 	    if ($path == $options['login_check_url'] || $path == $options['login_url']) {
 		return;
@@ -63,7 +64,7 @@ abstract class AbstractSecurity
 		}
             }
 
-            $user = $self->getUser();
+            $user = $self->getUserEid();
 
             if ($matched && $options['force_auth'] && empty($user)) {
 		$app['session']->set('redirect_after_login', $app['request']->getUri());
@@ -74,19 +75,22 @@ abstract class AbstractSecurity
         // Vérification des identifiants
         $app->get($options['login_check_url'], function(Request $request) use ($app, $options, $self) {
         
-            $user = $self->authenticate($options, $request);
+            $login = $self->authenticate($options, $request);
+            $user = $app['users']->getByLogin($login);
 
             if (($callback = $options['callback']) !== null) {
                 $return = $callback($user);
-            } else {
+            }
+            else {
                 $return = true;
             }
-
-            if (!($user && $return)) {
+            
+            if (!$return || !$user->exists()) {
                 return $app->abort(403, 'Acces denied');
             }
 
-            $self->setUser($user);
+            $eid = $user->eid();
+            $self->setUserEid($eid);
 
 	    return $app->redirect($self->getRedirectUrl() ?: $options['redirect']);
 
@@ -108,9 +112,9 @@ abstract class AbstractSecurity
     }
 
     /**
-     * Obtenir l'utilisateur courrant
+     * Obtenir l'utilisateur courrant par son eid
      */
-    public function getUser()
+    public function getUserEid()
     {
         if ($this->app['session']->has($this->app['security.session_key'])) {
             return $this->app['session']->get($this->app['security.session_key']);
@@ -120,11 +124,11 @@ abstract class AbstractSecurity
     }
 
     /**
-     * Changer l'utilisateur courrant
+     * Changer l'utilisateur courrant par son eid
      *
      * @param mixed $user l'utilisateur
      */
-    public function setUser($user)
+    public function setUserEid($eid)
     {
         if (isset($user)) {
             $this->app['session']->set($this->app['security.session_key'], $user);
