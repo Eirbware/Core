@@ -66,6 +66,13 @@ class User
     {
         return (bool)(isset($this->datas) && !empty($this->datas['eid']) && !empty($this->datas['login']));
     }
+    /**
+     * Alias de exists()
+     */
+    public function exist()
+    {
+        return $this->exists();
+    }
 
     /**
      * La conversion en chaîne donne le login
