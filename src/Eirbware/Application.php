@@ -85,12 +85,7 @@ class Application extends BaseApplication
             $app->assertDB();
             if ($app['security']->getUserEid()) {
                 $user = $app['users']->getByEid($app['security']->getUserEid());
-                if ($user->exists()) {
-                    return $user;
-                }
-                else {
-                    return null;
-                }
+                return $user;
             } else {
                 return null;
             }

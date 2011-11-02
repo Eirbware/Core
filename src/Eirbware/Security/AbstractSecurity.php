@@ -85,11 +85,17 @@ abstract class AbstractSecurity
                 $return = true;
             }
             
-            if (!$return || !$user->exists()) {
+            if (!$return || empty($user)) {
                 return $app->abort(403, 'Acces denied');
             }
 
-            $eid = $user->eid();
+            $eid = null;
+            if ($app['user.object']) {
+                $eid = $user->eid();
+            }
+            else {
+                $eid = $user['eid'];
+            }
 
             $self->setUserEid($eid);
 

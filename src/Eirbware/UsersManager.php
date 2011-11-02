@@ -116,7 +116,7 @@ class UsersManager
     }
 
     /**
-     * Obtenir la liste des élèves, en filtrant éventuellement par filière
+     * Obtenir la liste des élèves
      *
      * @param boolean $queryBuilder obtenir un QueryBuilder au lieu du résultat
      */
@@ -150,9 +150,13 @@ class UsersManager
      */
     public function createUser($datas)
     {
-        $user_class = $this->app['user.class'];
-
-        return new $user_class($datas, $this->app);
+        if (empty($datas)) {
+            return null;
+        }
+        else {
+            $user_class = $this->app['user.class'];
+            return new $user_class($datas, $this->app);
+        }
     }
 
     /**
@@ -161,7 +165,8 @@ class UsersManager
      */
     public function createUsers($datas)
     {
-        return array_map(array($this, 'createUser'), $datas);
+        $tmp_datas = array_map(array($this, 'createUser'), $datas);
+        return array_filter($tmp_datas, 'is_object');
     }
 
     /**
