@@ -75,6 +75,50 @@ class User
     }
 
     /**
+     * Test si l'utilisateur est un Club/Asso
+     */
+    public function isClubAsso()
+    {
+        if (!$this->exists() || !$this->filiere_id()) {
+            return null;
+        }
+        else {
+            $filiere = $this->filiere_id();
+            return ($filiere == 8);
+        }
+    }
+    
+    /**
+     * Test si l'utilisateur est un ancien élève
+     */
+    public function isAncien()
+    {
+        if (!$this->exists() || !$this->filiere_id()) {
+            return null;
+        }
+        else {
+            $filiere = $this->filiere_id();
+            return ($filiere == 7);
+        }
+    }
+
+    /**
+     * Test si l'utilisateur est un élève actuel de l'école
+     */
+    public function isEleve()
+    {
+        return $this->isPersonne() && !$this->isAncien();
+    }
+
+    /**
+     * Test si l'utilisateur est un élève actuel ou un ancien de l'école
+     */
+    public function isPersonne()
+    {
+        return !$this->isClubAsso();
+    }
+
+    /**
      * La conversion en chaîne donne le login
      */
     public function __toString()
