@@ -86,7 +86,7 @@ abstract class AbstractSecurity
             }
             
             if (!$return || empty($user)) {
-                return $app->abort(403, 'Acces denied');
+                return $app->abort(403, 'Acces denied for '.$login);
             }
 
             $eid = null;
