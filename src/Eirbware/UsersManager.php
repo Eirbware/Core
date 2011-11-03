@@ -132,8 +132,7 @@ class UsersManager
 
         $datas = $this->db->fetchAll($query);
 
-        $datas = $this->completeUsers($datas);
-        $datas = $this->objectUsers($datas);
+        $datas = $this->formatUsers($datas);
 
         return $datas;
     }
@@ -203,8 +202,8 @@ class UsersManager
      */
     public function formatUsers($datas)
     {
-        $datas = completeUsers($datas);
-        $datas = objectUsers($datas);
+        $datas = $this->completeUsers($datas);
+        $datas = $this->objectUsers($datas);
         return $datas;
     }
 
