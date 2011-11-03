@@ -64,7 +64,7 @@ class User
      * Aucune connexion à la base de donnée n'est réalisée
      * Cette modification ne concerne que l'instance courante
      */
-    private function setAttribute($property, $value)
+    protected function setAttribute($property, $value)
     {
         $this->datas[$property] = $value;
     }
