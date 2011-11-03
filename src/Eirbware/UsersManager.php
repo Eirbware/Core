@@ -93,12 +93,9 @@ class UsersManager
             $datas = array_replace($datas, $newDatas);
         }
 
-        if ($this->app['user.object']) {
-            return $this->createUser($datas, $this->app);
-        }
-        else {
-            return $datas;
-        }
+        $datas = $this->objectUser($datas, $this->app);
+
+        return $datas;
     }
 
     /**
@@ -134,13 +131,11 @@ class UsersManager
         }
 
         $datas = $this->db->fetchAll($query);
-        
-        if ($this->app['user.object']) {
-            return $this->createUsers($datas);
-        }
-        else {
-            return $datas;
-        }
+
+        $datas = $this->completeUsers($datas);
+        $datas = $this->objectUsers($datas);
+
+        return $datas;
     }
 
     /**
@@ -148,25 +143,69 @@ class UsersManager
      *
      * @param array : les attributs de l'objet utilisateur
      */
-    public function createUser($datas)
+    public function objectUser($user)
     {
-        if (empty($datas)) {
-            return null;
+        if (empty($user) || !$this->app['user.object']) {
+            return $user;
         }
         else {
             $user_class = $this->app['user.class'];
-            return new $user_class($datas, $this->app);
+            return new $user_class($user, $this->app);
         }
     }
 
     /**
      * Transforme un tableau d'utilisateurs sous forme associatif
-     * en tableau d'utilisateurs objet
+     * en tableau d'utilisateurs objet si user.object est activé
      */
-    public function createUsers($datas)
+    public function objectUsers($datas)
     {
-        $tmp_datas = array_map(array($this, 'createUser'), $datas);
-        return array_filter($tmp_datas, 'is_object');
+        if (!empty($datas) && $this->app['user.object']) {
+            return array_map(array($this, 'objectUser'), $datas);
+        }
+        else {
+            return $datas;
+        }
+    }
+
+    /**
+     * @param : un utilisateur sus la forme array associatif
+     * @return : cet utilisateur complété si besoin avec les données par défaut
+     */
+    public function completeUser($user)
+    {
+        if (!empty($user) && empty($user['id'])) {
+            return array_merge($user, $this->app['user.default_datas']);
+        }
+        else {
+            return $user;
+        }
+    }
+
+    /**
+     * Complète l'array d'utilisateur par des données par défaut
+     *
+     * @param : $datas : array d'utilisateurs sous forme d'array associatif
+     * @return : cet array dont les utilisateurs incomplets sont complétés par les donnnées par défauts
+     */
+    public function completeUsers($datas)
+    {
+        if (empty($datas) || empty($this->app['user.extension']) || empty($this->app['user.default_datas'])) {
+            return $datas;
+        }
+        else {
+            return array_map(array($this, 'completeUser'), $datas);
+        }
+    }
+
+    /**
+     * Alias à completeUsers() puis objectUsers()
+     */
+    public function formatUsers($datas)
+    {
+        $datas = completeUsers($datas);
+        $datas = objectUsers($datas);
+        return $datas;
     }
 
     /**
