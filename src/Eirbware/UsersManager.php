@@ -64,6 +64,19 @@ class UsersManager
     }
 
     /**
+     * Obtenir un utilisateur par son nom et prénom
+     *
+     * @param $prenom : prénom de l'utilisateur
+     * @param $nom  :nom de famille de l'utilisateur
+     *
+     * @return l'utilisateur correspondant, null sinon
+     */
+    public function getByName($prenom, $nom)
+    {
+        return $this->getUser(array('prenom' => $prenom, 'nom' => $nom));
+    }
+
+    /**
      * Obtenir un utilisateur sous conditions
      */
     public function getUser(array $conditions = array())
