@@ -99,7 +99,7 @@ class Auth
                     exit(0);
                 }
                 else {
-                    header('location: ' . $_SERVER["HTTP_HOST"]);
+                    header('location: http://' . $_SERVER["HTTP_HOST"]);
                     exit(0);
                 }
 
