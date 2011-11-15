@@ -20,7 +20,7 @@ abstract class AbstractSecurity
         'login_url' => '/login',
         'logout_url' => '/logout',
         'redirect' => '/',
-        'redirect_logout' => '/',
+        'redirect_logout' => 'http://auth.eirb.fr/logout',
         'callback' => null,
         'patterns' => array(
             '^/'
