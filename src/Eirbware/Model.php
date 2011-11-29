@@ -58,6 +58,14 @@ class Model
     }
 
     /**
+     * Obtenir une valeur
+     */
+    public function fetchColumn($sql, array $params = array())
+    {
+        return $this->db->fetchColumn($sql, $params);
+    }
+
+    /**
      * Obtient un QueryBuilder
      */
     public function createQueryBuilder()
