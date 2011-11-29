@@ -50,6 +50,14 @@ class Model
     }
 
     /**
+     * Obtenir tous les résultats
+     */
+    public function fetchAll($sql, array $params = array())
+    {
+        return $this->db->fetchAll($sql, $params);
+    }
+
+    /**
      * Obtient un QueryBuilder
      */
     public function createQueryBuilder()
