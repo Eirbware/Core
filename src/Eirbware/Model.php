@@ -3,7 +3,7 @@
 namespace Eirbware;
 
 /**
- * Modèle générique
+ * Modèle de base
  */
 class Model 
 {
@@ -39,6 +39,14 @@ class Model
     public function update($table, array $data, array $conditions, array $types = array())
     {
         return $this->db->update($table, $data, $conditions, $types);
+    }
+
+    /**
+     * Obtenir des enregistrements
+     */
+    public function fetchAssoc($sql, array $params = array())
+    {
+        return $this->db->fetchAssoc($sql, $params);
     }
 
     /**

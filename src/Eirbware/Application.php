@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Eirbware;
 
 use Silex\Application as BaseApplication;
