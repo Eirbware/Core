@@ -123,7 +123,7 @@ class Paginator implements \IteratorAggregate
         $qb->resetQueryParts($sqlParts);
         $qb->select('COUNT(*) as nb')->from('('.$sql.')', 'T');
 
-        $datas = $qb->execute()->fetch(PDO::FETCH_ASSOC);
+        $datas = $qb->execute()->fetch(\PDO::FETCH_ASSOC);
         $this->lines_nb = $datas['nb'];
 
         $this->pages_nb = ceil($this->lines_nb/$this->results_per_page);
@@ -172,7 +172,7 @@ class Paginator implements \IteratorAggregate
             ->setFirstResult(($this->page-1) * $this->results_per_page)
             ->setMaxResults($this->results_per_page)
             ->execute()
-            ->fetchAll(PDO::FETCH_ASSOC);
+            ->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
