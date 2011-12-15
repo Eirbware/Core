@@ -4,11 +4,6 @@ namespace Eirbware;
 
 use Silex\Application as BaseApplication;
 
-use Silex\Extension\SessionExtension;
-use Silex\Extension\TwigExtension;
-use Silex\Extension\DoctrineExtension;
-use Silex\Extension\UrlGeneratorExtension;
-
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -97,11 +92,11 @@ class Application extends BaseApplication
         });
 
         // Session 
-        $this->register(new SessionExtension());
+        $this->register(new \Silex\Provider\SessionServiceProvider());
         $this['session']->start();
 
         // Extension Twig
-        $this->register(new TwigExtension(), array(
+        $this->register(new \Silex\Provider\TwigServiceProvider(), array(
             'twig.path'       => $this['templates.dir'],
             'twig.class_path' => __DIR__.'/../../vendor/silex/vendor/twig/lib',
         ));
@@ -114,7 +109,7 @@ class Application extends BaseApplication
         });
 
         // Générateur d'URLs
-        $app->register(new UrlGeneratorExtension());
+        $app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
     }
 
     /**
@@ -147,7 +142,7 @@ class Application extends BaseApplication
             );
         }
 
-        $this->register(new DoctrineExtension(), array(
+        $this->register(new \Silex\Provider\DoctrineServiceProvider(), array(
             'dbs.options' => array(
                 'connection' => $options
             ),
