@@ -96,14 +96,23 @@ class UsersManager
         }
         $datas = $this->db->fetchAssoc($query, $values);
 
-        if (!empty($datas) && !empty($this->app['user.extension']) && !empty($this->app['user.default_datas']) && empty($datas['id'])) {
-            $newDatas = array_merge(array(
-                'eid' => $datas['eid']
-            ), $this->app['user.default_datas']);
+        if (!empty($datas) && !empty($this->app['user.extension']) && empty($datas['id'])) {
+            $newDatas = array_merge(
+                array('eid' => $datas['eid']), 
+                $this->app['user.default_datas']
+            );
 
             $this->db->insert($this->app['user.extension'], $newDatas);
 
             $datas = array_replace($datas, $newDatas);
+            $datas['id'] = $this->db->lastInsertId();
+
+            if (is_callable($this->app['user.init_callback'])) {
+                call_user_func(
+                    $this->app['user.init_callback'], 
+                    $this->objectUser($datas, $this->app)
+                );
+            }
         }
 
         $datas = $this->objectUser($datas, $this->app);
