@@ -96,7 +96,13 @@ class UsersManager
         }
         $datas = $this->db->fetchAssoc($query, $values);
 
-        if (!empty($datas) && !empty($this->app['user.extension']) && empty($datas['id'])) {
+        if (
+            !empty($datas) && 
+            !empty($this->app['user.extension']) && 
+            empty($datas['id']) && 
+            is_array($this->app['user.default_datas'])
+        ) {
+
             $newDatas = array_merge(
                 array('eid' => $datas['eid']), 
                 $this->app['user.default_datas']

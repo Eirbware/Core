@@ -29,7 +29,7 @@ class Application extends BaseApplication
 
         // Table d'extention utilisateur
         'user.extension' => null,
-        'user.default_datas' => array(),
+        'user.default_datas' => null,
         'user.init_callback' => null,
 
         // Paramètres pour la base de données de Eirbware 
